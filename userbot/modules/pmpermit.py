@@ -23,8 +23,9 @@ from userbot.events import register
 
 # ========================= CONSTANTS ============================
 DEF_UNAPPROVED_MSG = (
-    "Hey there! Unfortunately, I don't accept private messages from strangers.\n"
-    "Please contact me in a group, or wait for me to approve you."
+    "EN: Hello. At this moment I cannot reply to you. Wait for me to reply and don't spam, otherwise you'll be blocked\n"
+    "RU: Привет, к сожалению я не принимаю сообщения сейчас. Подожди пока я отвечу и не флуди, иначе бот заблокирует тебя\n\n"
+    "Powered by KyaruBot, made by Z3roHax"
 )
 # =================================================================
 
