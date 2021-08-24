@@ -32,7 +32,7 @@ LOGS.info("Your userbot is running!")
 
 LOGS.info(
     "Congratulations, the bot is up and running! Send .help in any chat for more info.\n"
-    "If you need assistance, die"
+    "If you need assistance, go to @nozerochat in telegram"
 )
 
 bot.run_until_disconnected()

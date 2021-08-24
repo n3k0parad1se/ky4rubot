@@ -228,9 +228,9 @@ async def update_restart_msg(chat_id, msg_id):
     message = (
         f"\n"
         f"**KyaruBot is running!**\n"
-        f"**Telethon:** 🔹 {version.__version__}\n"
-        f"**Python:** 🔹 {python_version()}\n"
-        f"**User:** 🔹 {DEFAULTUSER}"
+        f"**Telethon:** {version.__version__}\n"
+        f"**Python:** {python_version()}\n"
+        f"**User:** {DEFAULTUSER}"
         f"**[AUTHOR](https://t.me/yezerolinks) 🔹 [YOUTUBE](https://youtube.com/c/Z3roHax)**"
         f"\n"
     )

@@ -1,4 +1,4 @@
-FROM kenhv/kensurbot:debian
+FROM n3k0parad1se/Ky4ruBot:debian
 
 RUN set -ex \
     && git clone -b main https://github.com/n3k0parad1se/Ky4ruBot /root/userbot \
