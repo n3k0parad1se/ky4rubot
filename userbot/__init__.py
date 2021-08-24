@@ -166,7 +166,7 @@ GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN")
 USR_TOKEN = os.environ.get("USR_TOKEN_UPTOBOX")
 
 # KensurBot version
-KENSURBOT_VERSION = "1.2"
+KENSURBOT_VERSION = "1.3"
 
 
 def shutdown_bot(*_):
@@ -226,13 +226,10 @@ with bot:
 async def update_restart_msg(chat_id, msg_id):
     DEFAULTUSER = ALIVE_NAME or "Set `ALIVE_NAME` ConfigVar!"
     message = (
-        f"\n"
-        f"**KyaruBot is running!**\n"
+        f"**KyaruBot v{KENSURBOT_VERSION} is back up and running!**\n\n"
         f"**Telethon:** {version.__version__}\n"
         f"**Python:** {python_version()}\n"
         f"**User:** {DEFAULTUSER}"
-        f"**[AUTHOR](https://t.me/yezerolinks) 🔹 [YOUTUBE](https://youtube.com/c/Z3roHax)**"
-        f"\n"
     )
     await bot.edit_message(chat_id, msg_id, message)
     return True
