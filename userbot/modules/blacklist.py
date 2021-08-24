@@ -12,7 +12,7 @@ async def blacklist(event):
     try:
         from userbot.modules.sql_helper.blacklist_sql import add_blacklist
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**Запущен в режиме Non-SQL!**")
 
     try:
         chat_id = int(event.pattern_match.group(1))
@@ -22,14 +22,14 @@ async def blacklist(event):
     try:
         chat_id = await event.client.get_peer_id(chat_id)
     except Exception:
-        return await event.edit("**Error: Invalid username/ID provided.**")
+        return await event.edit("**Неверная информация**")
 
     try:
         add_blacklist(str(chat_id))
     except IntegrityError:
-        return await event.edit("**Given chat is already blacklisted.**")
+        return await event.edit("**Чат уже в черном списке.**")
 
-    await event.edit("**Blacklisted given chat!**")
+    await event.edit("**Чат чснут!**")
 
 
 @register(outgoing=True, pattern=r"^\.unblacklist (.*)")
@@ -41,7 +41,7 @@ async def unblacklist(event):
             get_blacklist,
         )
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**Запущен в режиме Non-SQL!**")
 
     chat_id = event.pattern_match.group(1)
     try:
@@ -53,7 +53,7 @@ async def unblacklist(event):
         from userbot.modules.sql_helper.blacklist_sql import del_blacklist_all
 
         del_blacklist_all()
-        return await event.edit("**Cleared all blacklists!**")
+        return await event.edit("**Очищен черный список!**")
 
     id_exists = False
     for i in get_blacklist():
@@ -61,10 +61,10 @@ async def unblacklist(event):
             id_exists = True
 
     if not id_exists:
-        return await event.edit("**This chat isn't blacklisted.**")
+        return await event.edit("**Чат не в блаклисте.**")
 
     del_blacklist(chat_id)
-    await event.edit("**Un-blacklisted given chat!**")
+    await event.edit("**Разблокирован этот чат!**")
 
 
 @register(outgoing=True, pattern=r"^\.blacklists$")
@@ -73,20 +73,20 @@ async def list_blacklist(event):
     try:
         from userbot.modules.sql_helper.blacklist_sql import get_blacklist
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**В режиме Non-SQL!**")
 
     chat_list = get_blacklist()
     if not chat_list:
-        return await event.edit("**You haven't blacklisted any chats yet!**")
+        return await event.edit("**Черный список пуст!**")
 
-    msg = "**Blacklisted chats:**\n\n"
+    msg = "**Черный список:**\n\n"
 
     for i in chat_list:
         try:
             chat = await event.client.get_entity(int(i.chat_id))
             chat = f"{chat.title} | `{i.chat_id}`"
         except (TypeError, ValueError):
-            chat = f"__Couldn't fetch chat info__ | `{i.chat_id}`"
+            chat = f"__Неверная информация__ | `{i.chat_id}`"
 
         msg += f"• {chat}\n"
 
@@ -95,14 +95,14 @@ async def list_blacklist(event):
 
 CMD_HELP.update(
     {
-        "blacklist": "**Disables all userbot functions on blacklisted groups.**"
+        "blacklist": "**Отключает юзербот в чатах.**"
         "\n\n`>.blacklist <username/id>`"
-        "\nUsage: Blacklists provided chat."
+        "\nДобавляет в черный список."
         "\n\n>`.unblacklist <username/id>`"
-        "\nUsage: Removes provided chat from blacklist."
+        "\nУдаляет из черного списка."
         "\n\n>`.unblacklist all`"
-        "\nUsage: Removes all chats from blacklist."
+        "\nОчищает черный список."
         "\n\n>`.blacklists`"
-        "\nUsage: Lists all blacklisted chats."
+        "\nПоказвает черный список."
     }
 )
