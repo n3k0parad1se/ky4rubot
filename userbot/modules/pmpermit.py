@@ -23,8 +23,8 @@ from userbot.events import register
 
 # ========================= CONSTANTS ============================
 DEF_UNAPPROVED_MSG = (
-    f"`EN: Hello. At this moment I cannot reply to you. Wait for me to reply and don't spam, otherwise you'll be blocked`\n"
-    f"`RU: Привет, к сожалению я не принимаю сообщения сейчас. Подожди пока я отвечу и не флуди, иначе бот заблокирует тебя`\n\n"
+    f"EN: Hello. At this moment I cannot reply to you. Wait for me to reply and don't spam, otherwise you'll be blocked\n"
+    f"RU: Привет, к сожалению я не принимаю сообщения сейчас. Подожди пока я отвечу и не флуди, иначе бот заблокирует тебя\n\n"
     f"**Powered by KyaruBot, made by Z3roHax**"
 )
 # =================================================================
