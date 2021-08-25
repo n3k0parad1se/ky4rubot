@@ -119,7 +119,7 @@ async def dyno_usage(dyno):
     """
     if app is None:
         return await dyno.edit(
-            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**""
+            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**"
         )
     await dyno.edit("**Processing...**")
     user_id = Heroku.account().id
