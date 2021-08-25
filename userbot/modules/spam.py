@@ -59,15 +59,15 @@ async def spammer(e):
 CMD_HELP.update(
     {
         "spam": ">`.cspam <text>`"
-        "\nUsage: Spam the text letter by letter."
+        "\nСпамит по буквам."
         "\n\n>`.spam <count> <text>`"
-        "\nUsage: Floods text in the chat!"
+        "\nФлудит в чат!"
         "\n\n>`.wspam <text>`"
-        "\nUsage: Spam the text word by word."
+        "\nФлудит текст по словам."
         "\n\n>`.picspam <count> <link to image/gif>`"
-        "\nUsage: As if text spam was not enough!"
+        "\nФлудит картинками!"
         "\n\n>`.delayspam <delay> <count> <text>`"
-        "\nUsage: .spam but with custom delay."
-        "\n\n\n**NOTE: Spam at your own risk!**"
+        "\nСпам с задержкой."
+        "\n\n\n**ПРЕД: Спамьте на ваш риск!**"
     }
 )

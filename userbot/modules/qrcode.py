@@ -57,9 +57,9 @@ async def parseqr(qr_e):
 @register(pattern=r"\.barcode(?: |$)([\s\S]*)", outgoing=True)
 async def bq(event):
     """For .barcode command, genrate a barcode containing the given content."""
-    await event.edit("**Processing...**")
+    await event.edit("**Обработка...**")
     input_str = event.pattern_match.group(1)
-    message = "**Syntax:** `.barcode <long text to include>`"
+    message = "**Синтаксис:** `.barcode <длинный текст>`"
     reply_msg_id = event.message.id
     if input_str:
         message = input_str
@@ -76,7 +76,7 @@ async def bq(event):
         else:
             message = previous_message.message
     else:
-        return event.edit("**Syntax:** `.barcode <long text to include>`")
+        return event.edit("**Синтаксис:** `.barcode <длинный текст>`")
 
     bar_code_type = "code128"
     try:
@@ -93,7 +93,7 @@ async def bq(event):
 async def make_qr(makeqr):
     """For .makeqr command, make a QR Code containing the given content."""
     input_str = makeqr.pattern_match.group(1)
-    message = "**Syntax:** `.makeqr <long text to include>`"
+    message = "**Синтаксис:** `.makeqr <длинный текст>`"
     reply_msg_id = None
     if input_str:
         message = input_str
@@ -130,12 +130,10 @@ async def make_qr(makeqr):
 CMD_HELP.update(
     {
         "qr": ">`.makeqr <content>`"
-        "\nUsage: Make a QR Code from the given content."
-        "\nExample: .makeqr www.google.com"
-        "\nNote: use `.decode <reply to barcode/qrcode>` to get decoded content.",
+        "\nДелает QR код."
+        "\nПример: .makeqr www.google.com"
         "barcode": ">`.barcode <content>`"
-        "\nUsage: Make a BarCode from the given content."
-        "\nExample: .barcode www.google.com"
-        "\nNote: use `.decode <reply to barcode/qrcode>` to get decoded content.",
+        "\nДелает Barcode."
+        "\nПример: .barcode www.google.com"
     }
 )

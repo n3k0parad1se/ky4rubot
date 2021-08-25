@@ -23,11 +23,11 @@ async def randomise(items):
     itemo = (items.text[8:]).split()
     if len(itemo) < 2:
         return await items.edit(
-            "**2 or more items are required!**\nCheck `.help random` for more info."
+            "**2 или больше предметов нужно!**\nПосмотрите `.help random` для большего."
         )
     index = randint(1, len(itemo) - 1)
     await items.edit(
-        "**Query: **\n`" + items.text[8:] + "`\n**Output: **\n`" + itemo[index] + "`"
+        "**Запрос: **\n`" + items.text[8:] + "`\n**Вывод: **\n`" + itemo[index] + "`"
     )
 
 
@@ -35,7 +35,7 @@ async def randomise(items):
 async def sleepybot(time):
     """For .sleep command, let the userbot snooze for a few second."""
     counter = int(time.pattern_match.group(1))
-    await time.edit("**I am sulking and snoozing...**")
+    await time.edit("**Я сплю...**")
     if BOTLOG:
         str_counter = time_formatter(counter)
         await time.client.send_message(
@@ -43,13 +43,13 @@ async def sleepybot(time):
             f"You put the bot to sleep for {str_counter}.",
         )
     sleep(counter)
-    await time.edit("**OK, I'm awake now.**")
+    await time.edit("**Я проснулся, потянулся, улыбнулся.**")
 
 
 @register(outgoing=True, pattern=r"^\.shutdown$")
 async def killthebot(event):
     """For .shutdown command, shut the bot down."""
-    await event.edit("**Shutting down.**")
+    await event.edit("**Завершение работы.**")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n" "Bot shut down")
     await bot.disconnect()
@@ -57,7 +57,7 @@ async def killthebot(event):
 
 @register(outgoing=True, pattern=r"^\.restart$")
 async def killdabot(event):
-    await event.edit("**Restarting...**")
+    await event.edit("**Перезапуск...**")
 
     try:
         from userbot.modules.sql_helper.globals import addgvar, delgvar
@@ -75,12 +75,9 @@ async def killdabot(event):
 @register(outgoing=True, pattern=r"^\.readme$")
 async def reedme(e):
     await e.edit(
-        "**Here's something for you to read:**\n"
-        "\n[Setup Guide - Basic](https://kenharris.xyz/userbot.html)"
-        "\n[Setup Guide - Google Drive](https://telegra.ph/How-To-Setup-Google-Drive-04-03)"
-        "\n[Setup Guide - LastFM Module](https://telegra.ph/How-to-set-up-LastFM-module-for-Paperplane-userbot-11-02)"
-        "\n[Video Tutorial - 576p](https://mega.nz/#!ErwCESbJ!1ZvYAKdTEfb6y1FnqqiLhHH9vZg4UB2QZNYL9fbQ9vs)"
-        "\n[Video Tutorial - 1080p](https://mega.nz/#!x3JVhYwR!u7Uj0nvD8_CyyARrdKrFqlZEBFTnSVEiqts36HBMr-o)"
+        "**Вот немного что прочесть:**\n"
+        "\n[Гайд - Google Drive](https://telegra.ph/How-To-Setup-Google-Drive-04-03)"
+        "\n[Гайд - LastFM модуль](https://telegra.ph/How-to-set-up-LastFM-module-for-Paperplane-userbot-11-02)"
     )
 
 
@@ -103,7 +100,7 @@ async def repeat(rep):
 async def repo_is_here(wannasee):
     """For .repo command, just returns the repo URL."""
     await wannasee.edit(
-        "Click [here](https://github.com/KenHV/KensurBot) to open the bot's GitHub page."
+        "Нажмите [сюда](https://github.com/n3k0parad1se) чтобы открыть страницу бота."
     )
 
 
@@ -127,19 +124,19 @@ async def raw(event):
                 force_document=True,
                 allow_cache=False,
                 reply_to=reply_to_id,
-                caption="**Here's the decoded message data!**",
+                caption="**Вот расшифрованное сообщение!**",
             )
-            await event.edit("**Check botlog group for the decoded message data.**")
+            await event.edit("**Посмотрите логи бота.**")
         except:
-            await event.edit("**This feature needs BOTLOG_CHATID to be set.**")
+            await event.edit("**Нужны установлены логи.**")
 
 
 @register(outgoing=True, pattern=r"^\.send (.*)")
 async def send(event):
-    await event.edit("**Processing...**")
+    await event.edit("**Обработка...**")
 
     if not event.is_reply:
-        return await event.edit("**Reply to a message!**")
+        return await event.edit("**Ответьте на сообщение!**")
 
     chat = event.pattern_match.group(1)
     try:
@@ -150,30 +147,30 @@ async def send(event):
     try:
         chat = await event.client.get_entity(chat)
     except (TypeError, ValueError):
-        return await event.edit("**Invalid link provided!**")
+        return await event.edit("**Неверная ссылка!**")
 
     message = await event.get_reply_message()
 
     await event.client.send_message(entity=chat, message=message)
-    await event.edit(f"**Sent this message to** `{chat.title}`**!**")
+    await event.edit(f"**Отправлено это сообщение в** `{chat.title}`**!**")
 
 
 CMD_HELP.update(
     {
         "random": ">`.random <item1> <item2> ... <itemN>`"
-        "\nUsage: Get a random item from the list of items.",
+        "\nВыбирает рандомный предмет.",
         "sleep": ">`.sleep <seconds>`"
-        "\nUsage: Lets your bot snooze for a few seconds.",
-        "shutdown": ">`.shutdown`" "\nUsage: Shuts down the bot.",
-        "repo": ">`.repo`" "\nUsage: GitHub repo of this bot",
+        "\nЗасыпает.",
+        "shutdown": ">`.shutdown`" "\nОтключает бота.",
+        "repo": ">`.repo`" "\nРепозиторий бота",
         "readme": ">`.readme`"
-        "\nUsage: Provides links to setup the userbot and it's modules.",
+        "\nНемного гайдов.",
         "repeat": ">`.repeat <no> <text>`"
-        "\nUsage: Repeats the text for a number of times. Don't confuse this with spam tho.",
-        "restart": ">`.restart`" "\nUsage: Restarts the bot.",
+        "\nПовторяет текст несколько раз.",
+        "restart": ">`.restart`" "\nПерезапускает бота.",
         "raw": ">`.raw`"
-        "\nUsage: Get detailed JSON-like formatted data about replied message.",
+        "\nДает сообщение в JSON.",
         "send": ">`.send <username/id>` (as a reply)"
-        '\nUsage: Forwards the replied message to given chat without the "Forwarded from" tag.',
+        '\nПересылает сообщение в чат без "Переслано от".',
     }
 )

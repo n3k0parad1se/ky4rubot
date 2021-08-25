@@ -43,7 +43,7 @@ async def subprocess_run(megadl, cmd):
     exitCode = subproc.returncode
     if exitCode != 0:
         await megadl.edit(
-            "**An error was detected while running subprocess.**\n\n"
+            "**Ошибочка.**\n\n"
             f"**Exit code:** `{exitCode}`\n"
             f"**Stdout:** `{stdout.decode().strip()}`\n"
             f"**Stderr:** `{stderr.decode().strip()}`"
@@ -54,7 +54,7 @@ async def subprocess_run(megadl, cmd):
 
 @register(outgoing=True, pattern=r"^\.mega(?: |$)(.*)")
 async def mega_downloader(megadl):
-    await megadl.edit("**Collecting information...**")
+    await megadl.edit("**Собираю информацию...**")
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     msg_link = await megadl.get_reply_message()
@@ -70,17 +70,17 @@ async def mega_downloader(megadl):
         if "file" in link:
             link = link.replace("#", "!").replace("file/", "#!")
         elif "folder" in link or "#F" in link or "#N" in link:
-            await megadl.edit("**Folders aren't supported.**")
+            await megadl.edit("**Папки не поддерживаются.**")
             return
     except IndexError:
-        await megadl.edit("**Error: Broken link.**")
+        await megadl.edit("**Сломанная ссылка.**")
         return None
     cmd = f"bin/megadown -q -m {link}"
     result = await subprocess_run(megadl, cmd)
     try:
         data = json.loads(result[0])
     except json.JSONDecodeError:
-        await megadl.edit("**JSONDecodeError**: `Failed to extract link.`")
+        await megadl.edit("**JSONDecodeError**: `Не удалось получить ссылку.`")
         return None
     except (IndexError, TypeError):
         return
@@ -122,11 +122,11 @@ async def mega_downloader(megadl):
         diff = time.time() - start
         try:
             current_message = (
-                f"**Name:** `{file_name}`\n"
+                f"**Имя:** `{file_name}`\n"
                 f"{progress_str}\n"
                 f"{humanbytes(downloaded)} of {humanbytes(total_length)}"
                 f" @ {speed}\n"
-                f"**Duration:** {time_formatter(round(diff))}\n"
+                f"**Длительность:** {time_formatter(round(diff))}\n"
                 f"**ETA:** {time_formatter(estimated_total_time)}"
             )
             if round(diff % 15.00) == 0 and (
@@ -157,16 +157,16 @@ async def mega_downloader(megadl):
             return None
         else:
             await megadl.edit(
-                "**Downloaded successfully!**\n\n"
-                f"**Name:** `{file_name}`\n"
-                f"**Path:** `{file_path}`\n"
-                f"**Duration:** {time_formatter(download_time)}"
+                "**Успешно скачано!**\n\n"
+                f"**Имя:** `{file_name}`\n"
+                f"**Путь:** `{file_path}`\n"
+                f"**Длительность:** {time_formatter(download_time)}"
             )
             return None
     else:
         await megadl.edit(
-            "**Error: Couldn't download given file.**\n"
-            "Check Heroku logs for more details (`.logs`)"
+            "**Не удалось скачать.**\n"
+            "Посмотрите логи (`.logs`)"
         )
         for e in downloader.get_errors():
             LOGS.info(str(e))
@@ -187,7 +187,7 @@ async def decrypt_file(megadl, file_path, temp_file_path, hex_key, hex_raw_key):
 CMD_HELP.update(
     {
         "mega": ">`.mega <MEGA.nz link>`"
-        "\nUsage: Reply to a MEGA.nz link or paste your MEGA.nz link to "
-        "download the file into your userbot server."
+        "\nСкачивает ссылки с MEGA.nz "
+        "на сервер юзербота."
     }
 )

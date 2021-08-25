@@ -30,12 +30,12 @@ async def fastpurger(purg):
                 await purg.client.delete_messages(chat, msgs)
                 msgs = []
     else:
-        return await purg.edit("**I need a mesasge to start purging from.**")
+        return await purg.edit("**Мне нужно начало очистки.**")
 
     if msgs:
         await purg.client.delete_messages(chat, msgs)
     done = await purg.client.send_message(
-        purg.chat_id, "**Fast purge complete!**" f"\nPurged {str(count)} messages"
+        purg.chat_id, "**Быстрая очистка выполнена!**" f"\nОчищено {str(count)} сообщений"
     )
     await sleep(2)
     await done.delete()
@@ -56,7 +56,7 @@ async def purgeme(delme):
 
     smsg = await delme.client.send_message(
         delme.chat_id,
-        "**Purge complete!** Purged " + str(count) + " messages.",
+        "**Очистка выполнена!** Очищено " + str(count) + " сообщений.",
     )
     await sleep(2)
     i = 1
@@ -72,7 +72,7 @@ async def delete_it(delme):
             await msg_src.delete()
             await delme.delete()
         except rpcbaseerrors.BadRequestError:
-            await delme.edit("**Well, I can't delete a message.**")
+            await delme.edit("**Я не могу удалить сообщение.**")
 
 
 @register(outgoing=True, pattern=r"^\.edit")
@@ -104,14 +104,13 @@ async def selfdestruct(destroy):
 
 CMD_HELP.update(
     {
-        "purge": ">`.purge`" "\nUsage: Purges all messages starting from the reply.",
+        "purge": ">`.purge`" "\nУдаляет сообщения начиная от реплая.",
         "purgeme": ">`.purgeme <x>`"
-        "\nUsage: Deletes x amount of your latest messages.",
-        "del": ">`.del`" "\nUsage: Deletes the message you replied to.",
+        "\nУдаляет x последних сообщений.",
+        "del": ">`.del`" "\nУдаляет ответ.",
         "edit": ">`.edit <newmessage>`"
-        "\nUsage: Replace your last message with <newmessage>.",
+        "\nРедактирует сообщение на <новое сообщение>.",
         "sd": ">`.sd <x> <message>`"
-        "\nUsage: Creates a message that selfdestructs in x seconds."
-        "\n<x> should be a two digit value, 3rd digit and further digits will be taken as <message>.",
+        "\nСоздает сообщение с автоудалением через Х секунд."
     }
 )

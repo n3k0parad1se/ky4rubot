@@ -22,16 +22,16 @@ from userbot import CMD_HELP, bot
 from userbot.events import register
 
 # ====================== CONSTANT ===============================
-INVALID_MEDIA = "**The extension of the media entity is invalid.**"
-PP_CHANGED = "**Profile picture changed successfully.**"
-PP_TOO_SMOL = "**This image is too small, use a bigger image.**"
-PP_ERROR = "**Failure occured while processing image.**"
+INVALID_MEDIA = "**Неверное расширение.**"
+PP_CHANGED = "**Картинка успешно изменена.**"
+PP_TOO_SMOL = "**Картинка маленькая.**"
+PP_ERROR = "**Ошибка при обработке.**"
 
-BIO_SUCCESS = "**Successfully edited Bio.**"
+BIO_SUCCESS = "**Успешно изменено био.**"
 
-NAME_OK = "**Your name was succesfully changed.**"
-USERNAME_SUCCESS = "**Your username was succesfully changed.**"
-USERNAME_TAKEN = "**This username is already taken.**"
+NAME_OK = "**Имя успешно изменено.**"
+USERNAME_SUCCESS = "**Юзернейм успешно изменен.**"
+USERNAME_TAKEN = "**Юзернейм занят.**"
 # ===============================================================
 
 
@@ -119,7 +119,7 @@ async def count(event):
     bc = 0
     b = 0
     result = ""
-    await event.edit("**Processing...**")
+    await event.edit("**Обработка...**")
     dialogs = await bot.get_dialogs(limit=None, ignore_migrated=True)
     for d in dialogs:
         currrent_entity = d.entity
@@ -138,11 +138,11 @@ async def count(event):
         else:
             print(d)
 
-    result += f"**Users:**\t`{u}`\n"
-    result += f"**Groups:**\t`{g}`\n"
-    result += f"**Supergroups:**\t`{c}`\n"
-    result += f"**Channels:**\t`{bc}`\n"
-    result += f"**Bots:**\t`{b}`"
+    result += f"**Юзеры:**\t`{u}`\n"
+    result += f"**Группы:**\t`{g}`\n"
+    result += f"**Супергруппы:**\t`{c}`\n"
+    result += f"**Каналы:**\t`{bc}`\n"
+    result += f"**Боты:**\t`{b}`"
 
     await event.edit(result)
 
@@ -171,25 +171,25 @@ async def remove_profilepic(delpfp):
     ]
     await delpfp.client(DeletePhotosRequest(id=input_photos))
     await delpfp.edit(
-        f"**Successfully deleted** `{len(input_photos)}` **profile picture(s).**"
+        f"**Успешно удалено** `{len(input_photos)}` **картинок профиля.**"
     )
 
 
 CMD_HELP.update(
     {
         "profile": ">`.username <new_username>`"
-        "\nUsage: Changes your Telegram username."
+        "\nМеняет юзернейм профиля."
         "\n\n>`.name <firstname>` or >`.name <firstname> <lastname>`"
-        "\nUsage: Changes your Telegram name.(First and last name will get split by the first space)"
+        "\nМеняет имя юзера"
         "\n\n>`.setpfp`"
-        "\nUsage: Reply with .setpfp to an image to change your Telegram profie picture."
+        "\nУстанавливает картинку профиля"
         "\n\n>`.setbio <new_bio>`"
-        "\nUsage: Changes your Telegram bio."
+        "\nМеняет био."
         "\n\n>`.delpfp` or >`.delpfp <number>/<all>`"
-        "\nUsage: Deletes your Telegram profile picture(s)."
+        "\nУдаляет фото профиля."
         "\n\n>`.reserved`"
-        "\nUsage: Shows usernames reserved by you."
+        "\nПоказывает зарезервированный вами юзернейм."
         "\n\n>`.count`"
-        "\nUsage: Counts your groups, chats, bots etc..."
+        "\nСчитает ваши группы, ботов и т.д...."
     }
 )

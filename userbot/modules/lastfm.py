@@ -29,15 +29,15 @@ from userbot import (
 from userbot.events import register
 
 # =================== CONSTANT ===================
-LFM_BIO_ENABLED = "**last.fm current music to bio is now enabled.**"
+LFM_BIO_ENABLED = "**last.fm музыка в био включена.**"
 LFM_BIO_DISABLED = (
-    "**last.fm current music to bio is now disabled. Bio reverted to default.**"
+    "**last.fm био-музыка отключена. Возвращено назад.**"
 )
-LFM_BIO_RUNNING = "**last.fm current music to bio is already running.**"
-LFM_ERR_NO_OPT = "**No option specified.**"
-LFM_LOG_ENABLED = "**last.fm logging to bot log is now enabled.**"
-LFM_LOG_DISABLED = "**last.fm logging to bot log is now disabled.**"
-ERROR_MSG = "**last.fm module halted, got an unexpected error.**"
+LFM_BIO_RUNNING = "**био-музыка last.fm уже запущена.**"
+LFM_ERR_NO_OPT = "**Опция не указана.**"
+LFM_LOG_ENABLED = "**last.fm логирование в бота включено.**"
+LFM_LOG_DISABLED = "**last.fm логирование в бота отключено.**"
+ERROR_MSG = "**last.fm получил неизвестную ошибку.**"
 
 ARTIST = 0
 SONG = 0
@@ -53,7 +53,7 @@ LastLog = False
 @register(outgoing=True, pattern=r"^\.lastfm$")
 async def last_fm(lastFM):
     """For .lastfm command, fetch scrobble data from last.fm."""
-    await lastFM.edit("**Processing...**")
+    await lastFM.edit("**Обработка...**")
     preview = None
     playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
     username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
@@ -70,19 +70,19 @@ async def last_fm(lastFM):
         rectrack = sub("^", "https://open.spotify.com/search/", rectrack)
         if image:
             output = (
-                f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:"
+                f"[‎]({image})[{LASTFM_USERNAME}]({username}) __слушает:"
                 f"__\n\n• [{playing}]({rectrack})\n`{tags}`"
             )
             preview = True
         else:
             output = (
-                f"[{LASTFM_USERNAME}]({username}) __is now listening to:"
+                f"[{LASTFM_USERNAME}]({username}) __слушает:"
                 f"__\n\n• [{playing}]({rectrack})\n`{tags}`"
             )
     else:
         recent = User(LASTFM_USERNAME, lastfm).get_recent_tracks(limit=5)
         playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
-        output = f"[{LASTFM_USERNAME}]({username}) __was last listening to:__\n\n"
+        output = f"[{LASTFM_USERNAME}]({username}) __слушал:__\n\n"
         for i, track in enumerate(recent):
             print(i)
             printable = await artist_and_song(track)
@@ -152,7 +152,7 @@ async def get_curr_track(lfmbio):
                 try:
                     if BOTLOG and LastLog:
                         await bot.send_message(
-                            BOTLOG_CHATID, f"Attempted to change bio to\n{lfmbio}"
+                            BOTLOG_CHATID, f"Attemped to change bio to\n{lfmbio}"
                         )
                     await bot(UpdateProfileRequest(about=lfmbio))
                 except AboutTooLongError:
@@ -229,10 +229,10 @@ async def lastlog(lstlog):
 CMD_HELP.update(
     {
         "lastfm": ">`.lastfm`"
-        "\nUsage: Shows currently scrobbling track or most recent scrobbles if nothing is playing."
+        "\nПоказывает трек который играл, или играет сейчас."
         "\n\n>`.lastbio <on/off>`"
-        "\nUsage: Enables/Disables last.fm current playing to bio."
+        "\nВключает/Отключает last.fm в био."
         "\n\n>`.lastlog <on/off>`"
-        "\nUsage: Enable/Disable last.fm bio logging in the bot-log group."
+        "\nВключает/Отключает last.fm био логирование."
     }
 )

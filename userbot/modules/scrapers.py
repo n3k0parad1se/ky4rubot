@@ -53,13 +53,13 @@ CARBONLANG = "auto"
 async def setlang(prog):
     global CARBONLANG
     CARBONLANG = prog.pattern_match.group(1)
-    await prog.edit(f"Language for carbon.now.sh set to {CARBONLANG}")
+    await prog.edit(f"Язык установлен на {CARBONLANG}")
 
 
 @register(outgoing=True, pattern=r"^\.carbon")
 async def carbon_api(e):
     """A Wrapper for carbon.now.sh"""
-    await e.edit("**Processing...**")
+    await e.edit("**Обработка...**")
     CARBON = "https://carbon.now.sh/?l={lang}&code={code}"
     global CARBONLANG
     textx = await e.get_reply_message()
@@ -69,7 +69,7 @@ async def carbon_api(e):
     elif textx:
         pcode = str(textx.message)  # Importing message to module
     code = quote_plus(pcode)  # Converting to urlencoded
-    await e.edit("**Processing...\n25%**")
+    await e.edit("**Обработка...\n25%**")
     dl_path = "./.carbon/"
     file_path = dl_path + "carbon.png"
     if os.path.isfile(file_path):
@@ -77,7 +77,7 @@ async def carbon_api(e):
     url = CARBON.format(code=code, lang=CARBONLANG)
     driver = await chrome()
     driver.get(url)
-    await e.edit("**Processing...\n50%**")
+    await e.edit("**Обработка...\n50%**")
     driver.command_executor._commands["send_command"] = (
         "POST",
         "/session/$sessionId/chromium/send_command",
@@ -88,18 +88,18 @@ async def carbon_api(e):
     }
     driver.execute("send_command", params)
     driver.find_element_by_css_selector('[data-cy="quick-export-button"]').click()
-    await e.edit("**Processing...\n75%**")
+    await e.edit("**Обработка...\n75%**")
     # Waiting for downloading
     while not os.path.isfile(file_path):
         await sleep(0.5)
-    await e.edit("**Processing...\n100%**")
-    await e.edit("**Uploading...**")
+    await e.edit("**Обработка...\n100%**")
+    await e.edit("**Загрузка...**")
     await e.client.send_file(
         e.chat_id,
         file_path,
         caption=(
-            "Made using [Carbon](https://carbon.now.sh/about/),"
-            "\na project by [Dawn Labs](https://dawnlabs.io/)"
+            "Сделано с помощью [Carbon](https://carbon.now.sh/about/),"
+            "\na При поддержке [Dawn Labs](https://dawnlabs.io/)"
         ),
         force_document=True,
         reply_to=e.message.reply_to_msg_id,
@@ -122,9 +122,9 @@ async def img_sampler(event):
         query = str(event.pattern_match.group(2))
 
     if not query:
-        return await event.edit("**Reply to a message or pass a query to search!**")
+        return await event.edit("**Ответ н сообщение или запрос!**")
 
-    await event.edit("**Processing...**")
+    await event.edit("**Обработка...**")
 
     if event.pattern_match.group(1) != "":
         counter = int(event.pattern_match.group(1))
@@ -150,7 +150,7 @@ async def img_sampler(event):
     try:
         paths = response.download(arguments)
     except Exception as e:
-        return await event.edit(f"**Error:** `{e}`")
+        return await event.edit(f"**Ошибка:** `{e}`")
 
     lst = paths[0][query]
     await event.client.send_file(
@@ -171,11 +171,11 @@ async def moni(event):
             params={"from": c_from, "to": c_to},
         ).json()
     except Exception:
-        await event.edit("**Error: API is down.**")
+        await event.edit("**Апи умер.**")
         return
     if "error" in response:
         await event.edit(
-            "**This seems to be some alien currency, which I can't convert right now.**"
+            "**Не могу сделать это сейчас.**"
         )
         return
     c_to_val = round(c_from_val * response["rates"][c_to], 2)

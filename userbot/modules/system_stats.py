@@ -38,7 +38,7 @@ async def sysdetails(sysd):
 
             await sysd.edit("`" + result + "`")
         except FileNotFoundError:
-            await sysd.edit("**Install neofetch first!**")
+            await sysd.edit("**Установите неофетч сначала!**")
 
 
 @register(outgoing=True, pattern=r"^\.botver$")
@@ -71,7 +71,7 @@ async def bot_ver(event):
 
         await event.edit(f"**Userbot:** `{verout}`\n" f"**Revision:** `{revout}`\n")
     else:
-        await event.edit("**Shame that you don't have git!**")
+        await event.edit("**Позор! У вас нету гита!**")
 
 
 @register(outgoing=True, pattern=r"^\.pip(?: |$)(.*)")
@@ -81,7 +81,7 @@ async def pipcheck(pip):
         return
     pipmodule = pip.pattern_match.group(1)
     if pipmodule:
-        await pip.edit("**Searching...**")
+        await pip.edit("**Поиск...**")
         pipc = await asyncrunapp(
             "pip3",
             "search",
@@ -95,7 +95,7 @@ async def pipcheck(pip):
 
         if pipout:
             if len(pipout) > 4096:
-                await pip.edit("**Output too large, sending as file...**")
+                await pip.edit("**Вывод большой, отправляю файлом...**")
                 with open("output.txt", "w+") as file:
                     file.write(pipout)
                 await pip.client.send_file(
@@ -106,30 +106,35 @@ async def pipcheck(pip):
                 remove("output.txt")
                 return
             await pip.edit(
-                "**Query: **\n`"
+                "**Запрос: **\n`"
                 f"pip3 search {pipmodule}"
-                "`\n**Result: **\n`"
+                "`\n**Результат: **\n`"
                 f"{pipout}"
                 "`"
             )
         else:
             await pip.edit(
-                "**Query: **\n`"
+                "**Запрос: **\n`"
                 f"pip3 search {pipmodule}"
-                "`\n**Result: **\n`No result returned/False`"
+                "`\n**Результат: **\n`No result returned/False`"
             )
     else:
-        await pip.edit("**Use .help pip to see an example.**")
+        await pip.edit("**Используйте .help pip для примера.**")
 
 
 @register(outgoing=True, pattern=r"^\.alive$")
 async def amireallyalive(alive):
     """For .alive command, check if the bot is running."""
     await alive.edit(
-        f"**KensurBot v{KENSURBOT_VERSION} is up and running!**\n\n"
-        f"**Telethon:** {version.__version__}\n"
-        f"**Python:** {python_version()}\n"
-        f"**User:** {DEFAULTUSER}"
+        f"┏━━━━━━━━━━━━━━━━━━━\n"
+        f"┣•➳➠ KyaruBot is up!**\n\n"
+        f"┣•➳➠ Telethon {version.__version__}\n"
+        f"┣•➳➠ Python: {python_version()}\n"
+        f"┣•➳➠ User: {DEFAULTUSER}"
+        f"┗━━━━━━━━━━━━━━━━━━━\n"
+        " [🔥YOUTUBE🔥](https://youtube.com/c/Z3roHax) 🔹 [📜TELEGRAM LINKS📜](https://t.me/yezerolinks)"
+        " 🔥DISCORD🔥 🔹 📜INSTAGRAM📜"
+        " [🔥REPO🔥](https://github.com/n3k0parad1se/Ky4ruBot)"
     )
 
 
@@ -141,7 +146,7 @@ async def amireallyaliveuser(username):
         newuser = message[8:]
         global DEFAULTUSER
         DEFAULTUSER = newuser
-    await username.edit(f"**Successfully changed user to** `{newuser}`**!**")
+    await username.edit(f"**Юзер изменен на** `{newuser}`**!**")
 
 
 @register(outgoing=True, pattern=r"^\.resetalive$")
@@ -149,19 +154,19 @@ async def amireallyalivereset(ureset):
     """For .resetalive command, reset the username in the .alive command."""
     global DEFAULTUSER
     DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
-    await ureset.edit("**Successfully reset user for alive!**")
+    await ureset.edit("**Юзер сброшен!**")
 
 
 CMD_HELP.update(
     {
-        "sysd": ">`.sysd`" "\nUsage: Shows system information using neofetch.",
-        "botver": ">`.botver`" "\nUsage: Shows the userbot version.",
-        "pip": ">`.pip <module(s)>`" "\nUsage: Does a search of pip modules(s).",
+        "sysd": ">`.sysd`" "\nПоказывает инфо с помощью неофетча.",
+        "botver": ">`.botver`" "\nПоказывает версию юзербота.",
+        "pip": ">`.pip <module(s)>`" "\nДелает поиск модулей пипа.",
         "alive": ">`.alive`"
-        "\nUsage: Type .alive to see wether your bot is working or not."
+        "\nПоказывает работу бота."
         "\n\n>`.aliveu <text>`"
-        "\nUsage: Changes the 'user' in alive to the text you want."
+        "\nМеняет имя юзера."
         "\n\n>`.resetalive`"
-        "\nUsage: Resets the user to default.",
+        "\nСбрасывает все до умолчаний.",
     }
 )
