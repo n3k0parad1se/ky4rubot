@@ -85,7 +85,7 @@ async def variable(var):
 async def set_var(var):
     if app is None:
         return await var.edit(
-            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**""
+            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**"
         )
     await var.edit("**Setting ConfigVar...**")
     variable = var.pattern_match.group(1)
@@ -177,7 +177,7 @@ async def dyno_usage(dyno):
 async def _(dyno):
     if app is None:
         return await dyno.edit(
-            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**""
+            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**"
         )
     await dyno.edit("**Обработка...**")
     with open("logs.txt", "w") as log:
