@@ -29,7 +29,7 @@ async def blacklist(event):
     except IntegrityError:
         return await event.edit("**Чат уже в черном списке.**")
 
-    await event.edit("**Чат чснут!**")
+    await event.edit("**Чат заблокирован!**")
 
 
 @register(outgoing=True, pattern=r"^\.unblacklist (.*)")
@@ -61,7 +61,7 @@ async def unblacklist(event):
             id_exists = True
 
     if not id_exists:
-        return await event.edit("**Чат не в блаклисте.**")
+        return await event.edit("**Чат не в черном списке.**")
 
     del_blacklist(chat_id)
     await event.edit("**Разблокирован этот чат!**")

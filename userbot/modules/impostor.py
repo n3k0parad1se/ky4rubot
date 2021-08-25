@@ -15,35 +15,35 @@ async def impostor(event):
     inputArgs = event.pattern_match.group(1)
 
     if "restore" in inputArgs:
-        await event.edit("**Reverting to my true identity...**")
+        await event.edit("**Возвращаю свою личность...**")
         if not STORAGE.userObj:
             return await event.edit(
-                "**You need to impersonate a profile before reverting!**"
+                "**Вам нужно персонализировать профиль перед откатом!**"
             )
         await updateProfile(STORAGE.userObj, restore=True)
-        return await event.edit("**Feels good to be back!**")
+        return await event.edit("**Круто когда все свое!**")
     if inputArgs:
         try:
             user = await event.client.get_entity(inputArgs)
         except:
-            return await event.edit("**Invalid username/ID.**")
+            return await event.edit("**Неверный юзернейс/ID.**")
         userObj = await event.client(GetFullUserRequest(user))
     elif event.reply_to_msg_id:
         replyMessage = await event.get_reply_message()
         if replyMessage.sender_id is None:
-            return await event.edit("**Can't impersonate anonymous admins, sed.**")
+            return await event.edit("**Не могу украсть анонимного админа.**")
         userObj = await event.client(GetFullUserRequest(replyMessage.sender_id))
     else:
-        return await event.edit("**Do** `.help impostor` **to learn how to use it.**")
+        return await event.edit("**Введите** `.help impostor` **чтобы понять как его использовать.**")
 
     if not STORAGE.userObj:
         STORAGE.userObj = await event.client(GetFullUserRequest(event.sender_id))
 
     LOGS.info(STORAGE.userObj)
 
-    await event.edit("**Stealing this random person's identity...**")
+    await event.edit("**Краду профиль этого человека...**")
     await updateProfile(userObj)
-    await event.edit("**I am you and you are me.**")
+    await event.edit("**Я это ты, и ты это я.**")
 
 
 async def updateProfile(userObj, restore=False):
@@ -84,12 +84,12 @@ async def updateProfile(userObj, restore=False):
 CMD_HELP.update(
     {
         "impostor": ">`.impostor` (as a reply to a message of a user)\
-    \nUsage: Steals the user's identity.\
+    \nКрадет личность юзера.\
     \n\n>`.impostor <username/ID>`\
-    \nUsage: Steals the given username/ID's identity.\
+    \nКрадет личность юзера.\
     \n\n>`.impostor restore`\
-    \nUsage: Revert back to your true identity.\
-    \n\n**Always restore before running it again.**\
+    \nВозвращает назад.\
+    \n\n**Возвращайте перед следующим запуском.**\
 "
     }
 )

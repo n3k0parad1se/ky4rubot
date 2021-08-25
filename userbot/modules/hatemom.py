@@ -95,9 +95,9 @@ async def hateen(enh):
 CMD_HELP.update(
     {
         "hatebot": ".ruhate\
-\nUsage: hates mom in russian.\
+\nОбзывает на русском.\
 \n\n.enhate\
-\nUsage: hates mom in english\
+\nОбзывает на английском\
 "
     }
 )

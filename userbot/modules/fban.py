@@ -6,15 +6,15 @@ from userbot import CMD_HELP, bot
 from userbot.events import register
 
 fban_replies = [
-    "New FedBan",
-    "Starting a federation ban",
-    "Start a federation ban",
-    "FedBan Reason update",
-    "FedBan reason updated",
-    "has already been fbanned, with the exact same reason.",
+    "Новый Фед-Бан",
+    "Запускаю Фед-Бан",
+    "Запуск Фед-Бана",
+    "Обновление причины Фед-Бана",
+    "Причина Фед-Бана обновлена",
+    "уже забанен с такой причиной.",
 ]
 
-unfban_replies = ["New un-FedBan", "I'll give", "Un-FedBan"]
+unfban_replies = ["Новый Фед-Разбан", "Я дам", "Фед-Разбан"]
 
 
 @register(outgoing=True, disable_edited=True, pattern=r"^\.(d)?fban(?: |$)(.*)")
@@ -23,7 +23,7 @@ async def fban(event):
     try:
         from userbot.modules.sql_helper.fban_sql import get_flist
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**Запущен в режиме Non-SQL!**")
 
     match = event.pattern_match.group(2)
 
@@ -47,16 +47,16 @@ async def fban(event):
 
     if event.sender_id == fban_id:
         return await event.edit(
-            "**Error: This action has been prevented by KensurBot self preservation protocols.**"
+            "**Это было не разрешено ботом.**"
         )
 
     fed_list = get_flist()
     if len(fed_list) == 0:
-        return await event.edit("**You haven't connected to any federations yet!**")
+        return await event.edit("**Вы не подключены к федерации!**")
 
     user_link = f"[{fban_id}](tg://user?id={fban_id})"
 
-    await event.edit(f"**Fbanning** {user_link}...")
+    await event.edit(f"**Фед-блокирую** {user_link}...")
     failed = []
     total = 0
 
@@ -76,17 +76,17 @@ async def fban(event):
         except Exception:
             failed.append(i.fed_name)
 
-    reason = reason if reason else "Not specified."
+    reason = reason if reason else "Не указано."
 
     if failed:
-        status = f"Failed to fban in {len(failed)}/{total} feds.\n"
+        status = f"Не удалось забанить в {len(failed)}/{total} федерациях.\n"
         for i in failed:
             status += f"• {i}\n"
     else:
-        status = f"Success! Fbanned in {total} feds."
+        status = f"Забанен в {total} федерациях."
 
     await event.edit(
-        f"**Fbanned **{user_link}!\n**Reason:** {reason}\n**Status:** {status}"
+        f"**Забанен **{user_link}!\n**Причина:** {reason}\n**Статус:** {status}"
     )
 
 
@@ -96,7 +96,7 @@ async def unfban(event):
     try:
         from userbot.modules.sql_helper.fban_sql import get_flist
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**Запущен в режиме Non-SQL!**")
 
     match = event.pattern_match.group(1)
     if event.is_reply:
@@ -113,15 +113,15 @@ async def unfban(event):
         pass
 
     if event.sender_id == unfban_id:
-        return await event.edit("**Wait, that's illegal**")
+        return await event.edit("**Стоп, это не так работает**")
 
     fed_list = get_flist()
     if len(fed_list) == 0:
-        return await event.edit("**You haven't connected to any federations yet!**")
+        return await event.edit("**Вы не подключены к федерации!**")
 
     user_link = f"[{unfban_id}](tg://user?id={unfban_id})"
 
-    await event.edit(f"**Un-fbanning **{user_link}**...**")
+    await event.edit(f"**Разбаниваю **{user_link}**...**")
     failed = []
     total = 0
 
@@ -141,18 +141,18 @@ async def unfban(event):
         except Exception:
             failed.append(i.fed_name)
 
-    reason = reason if reason else "Not specified."
+    reason = reason if reason else "Не указано."
 
     if failed:
-        status = f"Failed to un-fban in {len(failed)}/{total} feds.\n"
+        status = f"Не удалось разбанить {len(failed)}/{total} федерациях.\n"
         for i in failed:
             status += f"• {i}\n"
     else:
-        status = f"Success! Un-fbanned in {total} feds."
+        status = f"Разбанено в {total} федерациях."
 
-    reason = reason if reason else "Not specified."
+    reason = reason if reason else "Не указано."
     await event.edit(
-        f"**Un-fbanned** {user_link}!\n**Reason:** {reason}\n**Status:** {status}"
+        f"**Разбанен** {user_link}!\n**Причина:** {reason}\n**Статус:** {status}"
     )
 
 
@@ -162,20 +162,20 @@ async def addf(event):
     try:
         from userbot.modules.sql_helper.fban_sql import add_flist
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**Запущен в режиме Non-SQL!**")
 
     fed_name = event.pattern_match.group(1)
     if not fed_name:
-        return await event.edit("**Pass a name in order connect to this group!**")
+        return await event.edit("**Дайте имя чтобы присоеденится!**")
 
     try:
         add_flist(event.chat_id, fed_name)
     except IntegrityError:
         return await event.edit(
-            "**This group is already connected to federations list.**"
+            "**Эта группа уже подключена к федерации.**"
         )
 
-    await event.edit("**Added this group to federations list!**")
+    await event.edit("**Эта группа добавлена в список федерации!**")
 
 
 @register(outgoing=True, pattern=r"^\.delf$")
@@ -184,10 +184,10 @@ async def delf(event):
     try:
         from userbot.modules.sql_helper.fban_sql import del_flist
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**Запущен в режиме Non-SQL!**")
 
     del_flist(event.chat_id)
-    await event.edit("**Removed this group from federations list!**")
+    await event.edit("**Удалена эта группа из списка федерации!**")
 
 
 @register(outgoing=True, pattern=r"^\.listf$")
@@ -196,13 +196,13 @@ async def listf(event):
     try:
         from userbot.modules.sql_helper.fban_sql import get_flist
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**Запущен в режиме Non-SQL!**")
 
     fed_list = get_flist()
     if len(fed_list) == 0:
-        return await event.edit("**You haven't connected to any federations yet!**")
+        return await event.edit("**Вы не подключены к федерации!**")
 
-    msg = "**Connected federations:**\n\n"
+    msg = "**Подключенные федерации:**\n\n"
 
     for i in fed_list:
         msg += f"• {i.fed_name}\n"
@@ -216,28 +216,28 @@ async def clearf(event):
     try:
         from userbot.modules.sql_helper.fban_sql import del_flist_all
     except IntegrityError:
-        return await event.edit("**Running on Non-SQL mode!**")
+        return await event.edit("**Запущен в режиме Non-SQL!**")
 
     del_flist_all()
-    await event.edit("**Disconnected from all connected federations!**")
+    await event.edit("**Отключен от всех федераций!**")
 
 
 CMD_HELP.update(
     {
         "fban": ">`.fban <id/username> <reason>`"
-        "\nUsage: Bans user from connected federations."
-        "\nYou can reply to the user whom you want to fban or manually pass the username/id."
-        "\n`.dfban` does the same but deletes the replied message."
+        "\nБанит юзера в федерации."
+        "\nВы можете реплайнуть, или указать юзернейм/айди."
+        "\n`.dfban` делает то же самое, но удаляет сообщение."
         "\n\n`>.unfban <id/username> <reason>`"
-        "\nUsage: Same as fban but unbans the user"
+        "\nРазбанивает юзера"
         "\n\n>`.addf <name>`"
-        "\nUsage: Adds current group and stores it as <name> in connected federations."
-        "\nAdding one group is enough for one federation."
+        "\nДобавляет группу и держит как <name> в федерациях."
+        "\nОдной группы достаточно для одной федерации."
         "\n\n>`.delf`"
-        "\nUsage: Removes current group from connected federations."
+        "\nУдаляет группу из федерации."
         "\n\n>`.listf`"
-        "\nUsage: Lists all connected federations by specified name."
+        "\nСписок всех подключенных федераций."
         "\n\n>`.clearf`"
-        "\nUsage: Disconnects from all connected federations. Use it carefully."
+        "\nОтключается от всех федераций."
     }
 )

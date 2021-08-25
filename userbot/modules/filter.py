@@ -20,7 +20,7 @@ async def filter_incoming_handler(handler):
             try:
                 from userbot.modules.sql_helper.filter_sql import get_filters
             except AttributeError:
-                await handler.edit("`Running on Non-SQL mode!`")
+                await handler.edit("`В режиме Non-SQL!`")
                 return
             name = handler.raw_text
             filters = get_filters(handler.chat_id)
@@ -46,7 +46,7 @@ async def add_new_filter(new_handler):
     try:
         from userbot.modules.sql_helper.filter_sql import add_filter
     except AttributeError:
-        await new_handler.edit("`Running on Non-SQL mode!`")
+        await new_handler.edit("`В режиме Non-SQL!`")
         return
     keyword = new_handler.pattern_match.group(1)
     string = new_handler.text.partition(keyword)[2]
@@ -68,16 +68,16 @@ async def add_new_filter(new_handler):
             msg_id = msg_o.id
         else:
             return await new_handler.edit(
-                "`Saving media as reply to the filter requires the BOTLOG_CHATID to be set.`"
+                "`Сохранение должно иметь установленную переменную BOTLOG_CHATID.`"
             )
     elif new_handler.reply_to_msg_id and not string:
         rep_msg = await new_handler.get_reply_message()
         string = rep_msg.text
-    success = "`Filter` **{}** `{} successfully`"
+    success = "`Фильтр` **{}** `{} успешно`"
     if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        await new_handler.edit(success.format(keyword, "added"))
+        await new_handler.edit(success.format(keyword, "добавлен"))
     else:
-        await new_handler.edit(success.format(keyword, "updated"))
+        await new_handler.edit(success.format(keyword, "обновлен"))
 
 
 @register(outgoing=True, pattern=r"^\.stop ((@)?\w*)")
@@ -86,12 +86,12 @@ async def remove_a_filter(r_handler):
     try:
         from userbot.modules.sql_helper.filter_sql import remove_filter
     except AttributeError:
-        return await r_handler.edit("`Running on Non-SQL mode!`")
+        return await r_handler.edit("`В режиме Non-SQL!`")
     filt = r_handler.pattern_match.group(1)
     if not remove_filter(r_handler.chat_id, filt):
-        await r_handler.edit(f"`Filter` **{filt}** `doesn't exist.`")
+        await r_handler.edit(f"`Фильтр` **{filt}** `не существует.`")
     else:
-        await r_handler.edit(f"`Filter` **{filt}** `was deleted successfully`")
+        await r_handler.edit(f"`Фильтр` **{filt}** `был удален`")
 
 
 @register(outgoing=True, pattern=r"^\.rmbotfilters (.*)")
@@ -100,8 +100,8 @@ async def kick_marie_filter(event):
         Marie(or her clones) filters from a chat. """
     bot_type = event.pattern_match.group(1).lower()
     if bot_type not in ["marie", "rose"]:
-        return await event.edit("`That bot is not yet supported!`")
-    await event.edit("```Will be kicking away all Filters!```")
+        return await event.edit("`Этот бот не поддерживается!`")
+    await event.edit("```Буду удалять фильтры!```")
     await sleep(3)
     resp = await event.get_reply_message()
     filters = resp.text.split("-")[1:]
@@ -112,10 +112,10 @@ async def kick_marie_filter(event):
             i = i.replace("`", "")
             await event.reply("/stop %s" % (i.strip()))
         await sleep(0.3)
-    await event.respond("```Successfully purged bots filters yaay!```\n Gimme cookies!")
+    await event.respond("```Почистил фильтры ботов!```\n Дайте печенек!")
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID, "I cleaned all filters at " + str(event.chat_id)
+            BOTLOG_CHATID, "I cleaned all filters in " + str(event.chat_id)
         )
 
 
@@ -125,12 +125,12 @@ async def filters_active(event):
     try:
         from userbot.modules.sql_helper.filter_sql import get_filters
     except AttributeError:
-        return await event.edit("`Running on Non-SQL mode!`")
-    transact = "`There are no filters in this chat.`"
+        return await event.edit("`В режиме Non-SQL!`")
+    transact = "`В этом чате нету фильтров.`"
     filters = get_filters(event.chat_id)
     for filt in filters:
-        if transact == "`There are no filters in this chat.`":
-            transact = "Active filters in this chat:\n"
+        if transact == "`В этом чате нету фильтров.`":
+            transact = "Активные фильтры:\n"
         transact += f"`{filt.keyword}`\n"
     await event.edit(transact)
 
@@ -138,14 +138,13 @@ async def filters_active(event):
 CMD_HELP.update(
     {
         "filter": ">`.filters`"
-        "\nUsage: Lists all active userbot filters in a chat."
+        "\nСписок фильтров юзербота в этом чате."
         "\n\n>`.filter <keyword> <reply text>` or reply to a message with >`.filter <keyword>`"
-        "\nUsage: Saves the replied message as a reply to the 'keyword'."
-        "\nThe bot will reply to the message whenever 'keyword' is mentioned."
-        "\nWorks with everything from files to stickers."
+        "\nСохраняет ответ как 'фильтр'."
+        "\nОт стикеров до файлов."
         "\n\n>`.stop <filter>`"
-        "\nUsage: Stops the specified filter."
+        "\nОстанавливает фильтр."
         "\n\n>`.rmbotfilters <marie/rose>`"
-        "\nUsage: Removes all filters of admin bots (Currently supported: Marie, Rose and their clones.) in the chat."
+        "\nУдаляет фильтры ботов."
     }
 )
