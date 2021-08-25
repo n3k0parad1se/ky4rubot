@@ -127,7 +127,7 @@ async def amireallyalive(alive):
     """For .alive command, check if the bot is running."""
     await alive.edit(
         f"┏━━━━━━━━━━━━━━━━━━━\n"
-        f"┣•➳➠ KyaruBot is up!**\n"
+        f"┣•➳➠ **KyaruBot is up!**\n"
         f"┣•➳➠ Telethon {version.__version__}\n"
         f"┣•➳➠ Python: {python_version()}\n"
         f"┣•➳➠ User: {DEFAULTUSER}\n"
