@@ -127,14 +127,14 @@ async def amireallyalive(alive):
     """For .alive command, check if the bot is running."""
     await alive.edit(
         f"┏━━━━━━━━━━━━━━━━━━━\n"
-        f"┣•➳➠ KyaruBot is up!**\n\n"
+        f"┣•➳➠ KyaruBot is up!**\n"
         f"┣•➳➠ Telethon {version.__version__}\n"
         f"┣•➳➠ Python: {python_version()}\n"
-        f"┣•➳➠ User: {DEFAULTUSER}"
+        f"┣•➳➠ User: {DEFAULTUSER}\n"
         f"┗━━━━━━━━━━━━━━━━━━━\n"
-        " [🔥YOUTUBE🔥](https://youtube.com/c/Z3roHax) 🔹 [📜TELEGRAM LINKS📜](https://t.me/yezerolinks)"
-        " 🔥DISCORD🔥 🔹 📜INSTAGRAM📜"
-        " [🔥REPO🔥](https://github.com/n3k0parad1se/Ky4ruBot)"
+        " [🔥YOUTUBE🔥](https://youtube.com/c/Z3roHax) 🔹 [📜TELEGRAM LINKS📜](https://t.me/yezerolinks)\n"
+        " 🔥DISCORD🔥 🔹 📜INSTAGRAM📜\n"
+        " [🔥REPO🔥](https://github.com/n3k0parad1se/Ky4ruBot)\n"
     )
 
 
