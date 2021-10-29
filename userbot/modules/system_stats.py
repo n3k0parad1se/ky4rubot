@@ -13,13 +13,14 @@ from shutil import which
 
 from telethon import version
 
-from userbot import ALIVE_NAME, ALIVE_LOGO, CMD_HELP, KENSURBOT_VERSION
+from userbot import ALIVE_NAME, CMD_HELP, KENSURBOT_VERSION
 from userbot.events import register
 
 # ================= CONSTANT =================
 DEFAULTUSER = ALIVE_NAME or "Set `ALIVE_NAME` ConfigVar!"
 # ============================================
 
+ALIVE_LOGO = "https://i.imgur.com/YS0Xr4A.jpg"
 
 @register(outgoing=True, pattern=r"^\.sysd$")
 async def sysdetails(sysd):
