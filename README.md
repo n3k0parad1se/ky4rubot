@@ -15,7 +15,7 @@
 [![Run repl.it](https://img.shields.io/badge/run-string__session.py-blue?style=flat-square&logo=repl.it)](https://repl.it/@kenhv/sessiongen) - KenHV
 bruh
 
-<p align="left"><a href="https://heroku.com/deploy?template=https://github.com/thewhiteharlot/PurpleBot/tree/master"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to heroku" /></a></p>
+<p align="left"><a href="https://heroku.com/deploy?template=https://github.com/n3k0parad1se/Ky4ruBot/tree/main"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to heroku" /></a></p>
 
 
 ## Credits
