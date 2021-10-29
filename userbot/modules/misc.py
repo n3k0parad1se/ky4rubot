@@ -23,11 +23,11 @@ async def randomise(items):
     itemo = (items.text[8:]).split()
     if len(itemo) < 2:
         return await items.edit(
-            "**2 or more items are required!**\nCheck `.help random` for more info."
+            "**2 ou mais itens são necessários!**\nConfira `.help random` para mais informações."
         )
     index = randint(1, len(itemo) - 1)
     await items.edit(
-        "**Query: **\n`" + items.text[8:] + "`\n**Output: **\n`" + itemo[index] + "`"
+        "**Consulta: **\n`" + items.text[8:] + "`\n**Resultado: **\n`" + itemo[index] + "`"
     )
 
 
@@ -35,29 +35,29 @@ async def randomise(items):
 async def sleepybot(time):
     """For .sleep command, let the userbot snooze for a few second."""
     counter = int(time.pattern_match.group(1))
-    await time.edit("**I am sulking and snoozing...**")
+    await time.edit("**Estou de mau humor e cochilando...**")
     if BOTLOG:
         str_counter = time_formatter(counter)
         await time.client.send_message(
             BOTLOG_CHATID,
-            f"You put the bot to sleep for {str_counter}.",
+            f"Você colocou o bot para dormir por {str_counter}.",
         )
     sleep(counter)
-    await time.edit("**OK, I'm awake now.**")
+    await time.edit("**OK, estou acordado agora.**")
 
 
 @register(outgoing=True, pattern=r"^\.shutdown$")
 async def killthebot(event):
     """For .shutdown command, shut the bot down."""
-    await event.edit("**Shutting down.**")
+    await event.edit("**Desligando...**")
     if BOTLOG:
-        await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n" "Bot shut down")
+        await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n" "Bot desligado")
     await bot.disconnect()
 
 
 @register(outgoing=True, pattern=r"^\.restart$")
 async def killdabot(event):
-    await event.edit("**Restarting...**")
+    await event.edit("**Reiniciando...**")
 
     try:
         from userbot.modules.sql_helper.globals import addgvar, delgvar
@@ -75,12 +75,14 @@ async def killdabot(event):
 @register(outgoing=True, pattern=r"^\.readme$")
 async def reedme(e):
     await e.edit(
-        "**Here's something for you to read:**\n"
-        "\n[Setup Guide - Basic](https://kenharris.xyz/userbot.html)"
-        "\n[Setup Guide - Google Drive](https://telegra.ph/How-To-Setup-Google-Drive-04-03)"
-        "\n[Setup Guide - LastFM Module](https://telegra.ph/How-to-set-up-LastFM-module-for-Paperplane-userbot-11-02)"
-        "\n[Video Tutorial - 576p](https://mega.nz/#!ErwCESbJ!1ZvYAKdTEfb6y1FnqqiLhHH9vZg4UB2QZNYL9fbQ9vs)"
-        "\n[Video Tutorial - 1080p](https://mega.nz/#!x3JVhYwR!u7Uj0nvD8_CyyARrdKrFqlZEBFTnSVEiqts36HBMr-o)"
+        "Aqui estão algumas coisas interessantes:\n"
+        "\n[Grupo de Suporte](https://t.me/rokansu)"
+        "\n[Arquivo Readme do PurpleBot](https://github.com/thewhiteharlot/PurpleBot/blob/master/README.md)"
+        "\n[Guia de configuração - Bot](https://www.youtube.com/watch?v=SBYjQ25ugZY&feature=emb_title&ab_channel=TUDOSEMCORTE) - Créditos: @mandaloriam"
+        "\n[Guia de configuração - Google Drive](https://www.youtube.com/watch?v=Z0WFtwDMnes&ab_channel=TUDOSEMCORTE) - Créditos: @ramonazvd"
+        "\n[Guia de configuração - LastFM](https://telegra.ph/Tutorial-LastFM-02-04-2)"
+        "\n[Replit para gerar a String Session](https://repl.it/@kenhv/sessiongen)"
+        "\n__*Após entrar no Replit, clique no botão verde para executar__"
     )
 
 
@@ -103,7 +105,7 @@ async def repeat(rep):
 async def repo_is_here(wannasee):
     """For .repo command, just returns the repo URL."""
     await wannasee.edit(
-        "Click [here](https://github.com/LLXR/LumineUserBot) to open the bot's GitHub page."
+        "[Clique aqui](https://github.com/thewhiteharlot/PurpleBot) para abrir o repositório do PurpleBot."
     )
 
 
@@ -127,16 +129,16 @@ async def raw(event):
                 force_document=True,
                 allow_cache=False,
                 reply_to=reply_to_id,
-                caption="**Here's the decoded message data!**",
+                caption="**Aqui estão os dados da mensagem decodificada!**",
             )
-            await event.edit("**Check botlog group for the decoded message data.**")
+            await event.edit("**Verifique o grupo de botlog para os dados da mensagem decodificada.**")
         except:
-            await event.edit("**This feature needs BOTLOG_CHATID to be set.**")
+            await event.edit("**Este recurso precisa do BOTLOG_CHATID definido.**")
 
 
 @register(outgoing=True, pattern=r"^\.send (.*)")
 async def send(event):
-    await event.edit("**Processing...**")
+    await event.edit("**Processando...**")
 
     if not event.is_reply:
         return await event.edit("**Reply to a message!**")
@@ -150,30 +152,49 @@ async def send(event):
     try:
         chat = await event.client.get_entity(chat)
     except (TypeError, ValueError):
-        return await event.edit("**Invalid link provided!**")
+        return await event.edit("**Link inválido fornecido!**")
 
     message = await event.get_reply_message()
 
     await event.client.send_message(entity=chat, message=message)
-    await event.edit(f"**Sent this message to** `{chat.title}`**!**")
+    await event.edit(f"**Mensagem enviada para** `{chat.title}`**!**")
+
+
+@register(outgoing=True, pattern=r"^\.send (.*)")
+async def send(event):
+    await event.edit("**Processando...**")
+
+    if not event.is_reply:
+        return await event.edit("**Responda a uma mensagem!**")
+
+    chat = event.pattern_match.group(1)
+    try:
+        chat = await event.client.get_entity(chat)
+    except (TypeError, ValueError):
+        return await event.edit("**Link inválido fornecido!**")
+
+    message = await event.get_reply_message()
+
+    await event.client.send_message(entity=chat, message=message)
+    await event.edit(f"**Mensagem enviada para** `{chat.title}`**!**")
 
 
 CMD_HELP.update(
     {
         "random": ">`.random <item1> <item2> ... <itemN>`"
-        "\nUsage: Get a random item from the list of items.",
-        "sleep": ">`.sleep <seconds>`"
-        "\nUsage: Lets your bot snooze for a few seconds.",
-        "shutdown": ">`.shutdown`" "\nUsage: Shuts down the bot.",
-        "repo": ">`.repo`" "\nUsage: GitHub repo of this bot",
+        "\n**Uso:** Pegue um item aleatório da lista de itens.",
+        "sleep": ">`.sleep <segundos>`"
+        "\n**Uso:** Deixa seu bot adormecer por alguns segundos.",
+        "shutdown": ">`.shutdown`" "\n**Uso:** Encerra o bot.",
+        "repo": ">`.repo`" "\n**Uso:** Repositório GitHub deste bot",
         "readme": ">`.readme`"
-        "\nUsage: Provides links to setup the userbot and it's modules.",
-        "repeat": ">`.repeat <no> <text>`"
-        "\nUsage: Repeats the text for a number of times. Don't confuse this with spam tho.",
-        "restart": ">`.restart`" "\nUsage: Restarts the bot.",
+        "\n**Uso:** Fornece links para configurar o userbot e seus módulos.",
+        "repeat": ">`.repeat <número> <text>`"
+        "\n**Uso:** Repete o texto várias vezes. Não confunda isso com spam.",
+        "restart": ">`.restart`" "\n**Uso:** Reinicia o bot.",
         "raw": ">`.raw`"
-        "\nUsage: Get detailed JSON-like formatted data about replied message.",
-        "send": ">`.send <username/id>` (as a reply)"
-        '\nUsage: Forwards the replied message to given chat without the "Forwarded from" tag.',
+        "\n**Uso:** Obtenha dados detalhados em formato JSON sobre a mensagem respondida.",
+        "send": ">`.send <nome de usuário/id>` (como uma resposta)"
+        '\n**Uso**: Encaminha a mensagem respondida para determinado bate-papo sem a tag "Encaminhado".',
     }
 )

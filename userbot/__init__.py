@@ -12,6 +12,7 @@ from distutils.util import strtobool
 from logging import DEBUG, INFO, basicConfig, getLogger
 from pathlib import Path
 from platform import python_version
+from time import sleep
 
 from dotenv import load_dotenv
 from pylast import LastFMNetwork, md5
@@ -74,19 +75,15 @@ BOTLOG = strtobool(os.environ.get("BOTLOG", "False"))
 LOGSPAMMER = strtobool(os.environ.get("LOGSPAMMER", "False"))
 
 # Bleep Blop, this is a bot ;)
-PM_AUTO_BAN = strtobool(os.environ.get("PM_AUTO_BAN", "False"))
-
-# Custom alive logo
-ALIVE_LOGO = "https://i.imgur.com/YS0Xr4A.jpg"
+PM_AUTO_BAN = strtobool(os.environ.get("PM_AUTO_BAN",   "True"))
 
 # Heroku Credentials for updater.
 HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
 HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
 
 # Custom (forked) repo URL and BRANCH for updater.
-UPSTREAM_REPO_URL = "https://github.com/n3k0parad1se/Ky4ruBot"
-UPSTREAM_REPO_BRANCH = "main"
-
+UPSTREAM_REPO_URL = "https://github.com/thewhiteharlot/PurpleBot.git"
+UPSTREAM_REPO_BRANCH = "master"
 
 # Console verbose logging
 CONSOLE_LOGGER_VERBOSE = strtobool(os.environ.get("CONSOLE_LOGGER_VERBOSE") or "False")
@@ -96,6 +93,9 @@ DB_URI = os.environ.get("DATABASE_URL")
 
 # OCR API key
 OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY")
+
+# Default .alive logo
+ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
 
 # remove.bg API key
 REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY")
@@ -169,8 +169,8 @@ GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN")
 # Uptobox
 USR_TOKEN = os.environ.get("USR_TOKEN_UPTOBOX")
 
-# KensurBot version
-KENSURBOT_VERSION = "2.0"
+# PurpleBot version
+PURPLEBOT_VERSION = "5.1.2"
 
 
 def shutdown_bot(*_):
