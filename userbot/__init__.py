@@ -76,6 +76,9 @@ LOGSPAMMER = strtobool(os.environ.get("LOGSPAMMER", "False"))
 # Bleep Blop, this is a bot ;)
 PM_AUTO_BAN = strtobool(os.environ.get("PM_AUTO_BAN", "False"))
 
+# Custom alive logo
+ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
+
 # Heroku Credentials for updater.
 HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
 HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
@@ -84,8 +87,6 @@ HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
 UPSTREAM_REPO_URL = "https://github.com/n3k0parad1se/Ky4ruBot"
 UPSTREAM_REPO_BRANCH = "main"
 
-# Custom alive logo
-ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
 
 # Console verbose logging
 CONSOLE_LOGGER_VERBOSE = strtobool(os.environ.get("CONSOLE_LOGGER_VERBOSE") or "False")
