@@ -136,7 +136,7 @@ async def amireallyalive(alive):
     )
     if ALIVE_LOGO:
         try:
-            logo = "https://i.imgur.com/YS0Xr4A.jpg"
+            logo = https://i.imgur.com/YS0Xr4A.jpg
             await bot.send_file(alive.chat_id, logo, caption=output)
             await alive.delete()
         except BaseException:
