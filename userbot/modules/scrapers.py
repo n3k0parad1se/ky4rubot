@@ -46,20 +46,20 @@ from userbot.modules.upload_download import get_video_thumb
 from userbot.utils import chrome, googleimagesdownload, progress
 from userbot.utils.FastTelethon import upload_file
 
-CARBONLANG = "pt-br"
+CARBONLANG = "auto"
 
 
 @register(outgoing=True, pattern=r"^\.crblang (.*)")
 async def setlang(prog):
     global CARBONLANG
     CARBONLANG = prog.pattern_match.group(1)
-    await prog.edit(f"Idioma para carbon.now.sh definido para {CARBONLANG}")
+    await prog.edit(f"Language for carbon.now.sh set to {CARBONLANG}")
 
 
 @register(outgoing=True, pattern=r"^\.carbon")
 async def carbon_api(e):
     """A Wrapper for carbon.now.sh"""
-    await e.edit("**Processando...**")
+    await e.edit("**Processing...**")
     CARBON = "https://carbon.now.sh/?l={lang}&code={code}"
     global CARBONLANG
     textx = await e.get_reply_message()
@@ -69,7 +69,7 @@ async def carbon_api(e):
     elif textx:
         pcode = str(textx.message)  # Importing message to module
     code = quote_plus(pcode)  # Converting to urlencoded
-    await e.edit("**Processando...\n25%**")
+    await e.edit("**Processing...\n25%**")
     dl_path = "./.carbon/"
     file_path = dl_path + "carbon.png"
     if os.path.isfile(file_path):
@@ -77,7 +77,7 @@ async def carbon_api(e):
     url = CARBON.format(code=code, lang=CARBONLANG)
     driver = await chrome()
     driver.get(url)
-    await e.edit("**Processando...\n50%**")
+    await e.edit("**Processing...\n50%**")
     driver.command_executor._commands["send_command"] = (
         "POST",
         "/session/$sessionId/chromium/send_command",
@@ -88,18 +88,18 @@ async def carbon_api(e):
     }
     driver.execute("send_command", params)
     driver.find_element_by_css_selector('[data-cy="quick-export-button"]').click()
-    await e.edit("**Processando...\n75%**")
+    await e.edit("**Processing...\n75%**")
     # Waiting for downloading
     while not os.path.isfile(file_path):
         await sleep(0.5)
-    await e.edit("**Processando...\n100%**")
-    await e.edit("**Enviando...**")
+    await e.edit("**Processing...\n100%**")
+    await e.edit("**Uploading...**")
     await e.client.send_file(
         e.chat_id,
         file_path,
         caption=(
-            "Feito usando [Carbon](https://carbon.now.sh/about/),"
-            "\num projeto de [Dawn Labs](https://dawnlabs.io/)"
+            "Made using [Carbon](https://carbon.now.sh/about/),"
+            "\na project by [Dawn Labs](https://dawnlabs.io/)"
         ),
         force_document=True,
         reply_to=e.message.reply_to_msg_id,
@@ -122,9 +122,9 @@ async def img_sampler(event):
         query = str(event.pattern_match.group(2))
 
     if not query:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit("**Reply to a message or pass a query to search!**")
 
-    await event.edit("**Processando...**")
+    await event.edit("**Processing...**")
 
     if event.pattern_match.group(1) != "":
         counter = int(event.pattern_match.group(1))
@@ -150,7 +150,7 @@ async def img_sampler(event):
     try:
         paths = response.download(arguments)
     except Exception as e:
-        return await event.edit(f"**Erro:** `{e}`")
+        return await event.edit(f"**Error:** `{e}`")
 
     lst = paths[0][query]
     await event.client.send_file(
@@ -171,11 +171,11 @@ async def moni(event):
             params={"from": c_from, "to": c_to},
         ).json()
     except Exception:
-        await event.edit("**Erro: API está offline.**")
+        await event.edit("**Error: API is down.**")
         return
     if "error" in response:
         await event.edit(
-            "**Esta parece ser uma moeda alienígena, que não posso converter agora.**"
+            "**This seems to be some alien currency, which I can't convert right now.**"
         )
         return
     c_to_val = round(c_from_val * response["rates"][c_to], 2)
@@ -193,9 +193,9 @@ async def gsearch(event):
         match = str(event.pattern_match.group(2))
 
     if not match:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit("**Reply to a message or pass a query to search!**")
 
-    await event.edit("**Processando...**")
+    await event.edit("**Processing...**")
 
     if event.pattern_match.group(1) != "":
         counter = int(event.pattern_match.group(1))
@@ -213,7 +213,7 @@ async def gsearch(event):
         gresults = await gsearch.async_search(*search_args)
     except Exception:
         return await event.edit(
-            "**Erro: sua consulta não foi encontrada ou foi sinalizada como tráfego incomum.**"
+            "**Error: Your query could not be found or it was flagged as unusual traffic.**"
         )
     msg = ""
 
@@ -227,7 +227,7 @@ async def gsearch(event):
             break
 
     await event.edit(
-        "**Consulta de pesquisa:**\n`" + match + "`\n\n**Resultados:**\n" + msg, link_preview=False
+        "**Search Query:**\n`" + match + "`\n\n**Results:**\n" + msg, link_preview=False
     )
 
 
@@ -242,16 +242,16 @@ async def wiki(wiki_q):
         match = str(wiki_q.pattern_match.group(1))
 
     if not match:
-        return await wiki_q.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await wiki_q.edit("**Reply to a message or pass a query to search!**")
 
-    await wiki_q.edit("**Processando...**")
+    await wiki_q.edit("**Processing...**")
 
     try:
         summary(match)
     except DisambiguationError as error:
-        return await wiki_q.edit(f"**Página desambigada encontrada.**\n\n`{error}`")
+        return await wiki_q.edit(f"**Disambiguated page found.**\n\n`{error}`")
     except PageError as pageerror:
-        return await wiki_q.edit(f"**página não encontrada.**\n\n`{pageerror}`")
+        return await wiki_q.edit(f"**Page not found.**\n\n`{pageerror}`")
     result = summary(match)
     if len(result) >= 4096:
         with open("output.txt", "w+") as file:
@@ -260,11 +260,11 @@ async def wiki(wiki_q):
             wiki_q.chat_id,
             "output.txt",
             reply_to=wiki_q.id,
-            caption=r"**Resultado muito grande, enviando como arquivo**",
+            caption=r"**Output too large, sending as file**",
         )
         if os.path.exists("output.txt"):
             return os.remove("output.txt")
-    await wiki_q.edit("**Pesquisa:**\n`" + match + "`\n\n**Resultado:**\n" + result)
+    await wiki_q.edit("**Search:**\n`" + match + "`\n\n**Result:**\n" + result)
 
 
 @register(outgoing=True, pattern=r"^\.ud(?: |$)(.*)")
@@ -278,30 +278,30 @@ async def urban_dict(event):
         query = str(event.pattern_match.group(1))
 
     if not query:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit("**Reply to a message or pass a query to search!**")
 
-    await event.edit("**Processando...**")
+    await event.edit("**Processing...**")
     ud = asyncurban.UrbanDictionary()
-    template = "**Consulta:** `{}`\n\n**Definição:**\n{}\n\n**Exemplo:**\n__{}__"
+    template = "**Query:** `{}`\n\n**Definition:**\n{}\n\n**Example:**\n__{}__"
 
     try:
         definition = await ud.get_word(query)
     except asyncurban.UrbanException as e:
-        return await event.edit(f"**Erro:** `{e}`")
+        return await event.edit(f"**Error:** `{e}`")
 
     result = template.format(definition.word, definition.definition, definition.example)
 
     if len(result) < 4096:
         return await event.edit(result)
 
-    await event.edit("**Resultado muito grande, enviando como arquivo...**")
+    await event.edit("**Output too large, sending as file...**")
     with open("output.txt", "w+") as file:
         file.write(
-            "Consulta: "
+            "Query: "
             + definition.word
-            + "\n\nSignificado: "
+            + "\n\nMeaning: "
             + definition.definition
-            + "Exemplo: \n"
+            + "Example: \n"
             + definition.example
         )
     await event.client.send_file(
@@ -326,32 +326,32 @@ async def text_to_speech(query):
 
     if not message:
         return await query.edit(
-            "**Envie um texto ou responda a uma mensagem para conversão de texto em voz!**"
+            "**Give a text or reply to a message for Text-to-Speech!**"
         )
 
-    await query.edit("**Processando...**")
+    await query.edit("**Processing...**")
 
     try:
         from userbot.modules.sql_helper.globals import gvarstatus
     except AttributeError:
-        return await query.edit("**Executando em modo não SQL!**")
+        return await query.edit("**Running on Non-SQL mode!**")
 
     if gvarstatus("tts_lang") is not None:
         target_lang = str(gvarstatus("tts_lang"))
     else:
-        target_lang = "pt"
+        target_lang = "en"
 
     try:
         gTTS(message, lang=target_lang)
     except AssertionError:
         return await query.edit(
-            "**O texto está vazio.**\n"
-            "Não sobrou nada para falar após a pré-precessão, tokenização e limpeza."
+            "**The text is empty.**\n"
+            "Nothing left to speak after pre-precessing, tokenizing and cleaning."
         )
     except ValueError:
-        return await query.edit("**O idioma não é suportado.**")
+        return await query.edit("**Language is not supported.**")
     except RuntimeError:
-        return await query.edit("**Erro ao carregar o dicionário de idiomas.**")
+        return await query.edit("**Error loading the languages dictionary.**")
     tts = gTTS(message, lang=target_lang)
     tts.save("k.mp3")
     with open("k.mp3", "rb") as audio:
@@ -454,7 +454,7 @@ async def imdb(e):
             parse_mode="HTML",
         )
     except IndexError:
-        await e.edit("Por favor, insira um **nome válido de filme** kthx")
+        await e.edit("Plox enter **Valid movie name** kthx")
 
 
 @register(outgoing=True, pattern=r"^\.trt(?: |$)([\s\S]*)")
@@ -469,33 +469,33 @@ async def translateme(trans):
 
     if not message:
         return await trans.edit(
-            "**Escreva algum texto ou responda a uma mensagem para traduzir!**"
+            "**Give some text or reply to a message to translate!**"
         )
 
-    await trans.edit("**Processando...**")
+    await trans.edit("**Processing...**")
     translator = Translator()
 
     try:
         from userbot.modules.sql_helper.globals import gvarstatus
     except AttributeError:
-        return await trans.edit("**Executando em modo não SQL!**")
+        return await trans.edit("**Running on Non-SQL mode!**")
 
     if gvarstatus("trt_lang") is not None:
         target_lang = str(gvarstatus("trt_lang"))
     else:
-        target_lang = "pt"
+        target_lang = "en"
 
     try:
         reply_text = translator.translate(deEmojify(message), dest=target_lang)
     except ValueError:
         return await trans.edit(
-            "**Idioma inválido selecionado, use **`.lang trt <código da linguagem>`**.**"
+            "**Invalid language selected, use **`.lang trt <language code>`**.**"
         )
 
     source_lang = LANGUAGES.get(reply_text.src).title()  # type: ignore
     target_lang = LANGUAGES.get(target_lang).title()
 
-    reply_text = f"De: **{source_lang}**\nPara: **{target_lang}**\n\n{reply_text.text}"  # type: ignore
+    reply_text = f"From: **{source_lang}**\nTo: **{target_lang}**\n\n{reply_text.text}"  # type: ignore
 
     await trans.edit(reply_text)
 
@@ -508,7 +508,7 @@ async def lang(value):
     try:
         from userbot.modules.sql_helper.globals import addgvar, delgvar, gvarstatus
     except AttributeError:
-        return await lang.edit("**Executando em modo não SQL!**")
+        return await lang.edit("**Running on Non-SQL mode!**")
 
     if util == "trt":
         scraper = "Translator"
@@ -516,7 +516,7 @@ async def lang(value):
 
         if arg not in LANGUAGES:
             return await value.edit(
-                f"**Código de idioma inválido!**\nCódigos de idioma disponíveis:\n\n`{LANGUAGES}`"
+                f"**Invalid language code!**\nAvailable language codes:\n\n`{LANGUAGES}`"
             )
 
         if gvarstatus("trt_lang"):
@@ -530,7 +530,7 @@ async def lang(value):
 
         if arg not in tts_langs():
             return await value.edit(
-                f"**Código de idioma inválido!**\nCódigos de idioma disponíveis:\n\n`{tts_langs()}`"
+                f"**Invalid language code!**\nAvailable language codes:\n\n`{tts_langs()}`"
             )
 
         if gvarstatus("tts_lang"):
@@ -538,47 +538,10 @@ async def lang(value):
         addgvar("tts_lang", arg)
         LANG = tts_langs()[arg]
 
-    await value.edit(f"**Idioma de {scraper} mudou para {LANG.title()}.**")
+    await value.edit(f"**Language for {scraper} changed to {LANG.title()}.**")
     if BOTLOG:
         await value.client.send_message(
-            BOTLOG_CHATID, f"`Idioma de {scraper} mudou para {LANG.title()}.`"
-        )
-
-
-@register(outgoing=True, pattern="^.sg(?: |$)(.*)")
-async def lastname(steal):
-    if steal.fwd_from:
-        return
-    if not steal.reply_to_msg_id:
-        await steal.edit("**Responda a qualquer mensagem do usuário.**")
-        return
-    message = await steal.get_reply_message()
-    chat = "@SangMataInfo_bot"
-    user_id = message.sender.id
-    id = f"/search_id {user_id}"
-    if message.sender.bot:
-        await steal.edit("**Responda a mensagem de usuários reais.**")
-        return
-    await steal.edit("**Espere enquanto eu roubo alguns dados da NASA**")
-    async with bot.conversation(chat) as conv:
-        try:
-            msg = await conv.send_message(id)
-            r = await conv.get_response()
-            response = await conv.get_response()
-        except YouBlockedUserError:
-            await steal.reply("**Desbloqueie @sangmatainfo_bot e tente novamente**")
-            return
-        if response.text.startswith("No records"):
-            await steal.edit("**Nenhum registro encontrado para este usuário**")
-            await steal.client.delete_messages(
-                conv.chat_id, [msg.id, r.id, response.id]
-            )
-            return
-        else:
-            respond = await conv.get_response()
-            await steal.edit(f"{response.message}")
-        await steal.client.delete_messages(
-            conv.chat_id, [msg.id, r.id, response.id, respond.id]
+            BOTLOG_CHATID, f"`Language for {scraper} changed to {LANG.title()}.`"
         )
 
 
@@ -593,9 +556,9 @@ async def yt_search(event):
         query = str(event.pattern_match.group(2))
 
     if not query:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit("**Reply to a message or pass a query to search!**")
 
-    await event.edit("**Processando...**")
+    await event.edit("**Processing...**")
 
     if event.pattern_match.group(1) != "":
         counter = int(event.pattern_match.group(1))
@@ -609,9 +572,9 @@ async def yt_search(event):
     try:
         results = json.loads(YoutubeSearch(query, max_results=counter).to_json())
     except KeyError:
-        return await event.edit("**Youtube está louco!.\nNão é possível pesquisar esta consulta!**")
+        return await event.edit("**YouTube gone retard.\nCan't search this query!**")
 
-    output = f"**Consulta de pesquisa:**\n`{query}`\n\n**Resultados:**\n"
+    output = f"**Search Query:**\n`{query}`\n\n**Results:**\n"
 
     for i in results["videos"]:
         try:
@@ -620,7 +583,7 @@ async def yt_search(event):
             channel = i["channel"]
             duration = i["duration"]
             views = i["views"]
-            output += f"[{title}]({link})\nCanal: `{channel}`\nDuração: {duration} | {views}\n\n"
+            output += f"[{title}]({link})\nChannel: `{channel}`\nDuration: {duration} | {views}\n\n"
         except IndexError:
             break
 
@@ -635,7 +598,7 @@ async def download_video(v_url):
     reso = reso.strip() if reso else None
     url = v_url.pattern_match.group(3)
 
-    await v_url.edit("**Preparando o download...**")
+    await v_url.edit("**Preparing to download...**")
     s_time = time.time()
     video = False
     audio = False
@@ -686,35 +649,35 @@ async def download_video(v_url):
         video = True
 
     try:
-        await v_url.edit("**Buscando dados, por favor aguarde..**")
+        await v_url.edit("**Fetching data, please wait...**")
         with YoutubeDL(opts) as rip:
             rip_data = rip.extract_info(url)
     except DownloadError as DE:
         return await v_url.edit(f"**{str(DE)}**")
     except ContentTooShortError:
-        return await v_url.edit("**O conteúdo do download era muito curto.**")
+        return await v_url.edit("**The download content was too short.**")
     except GeoRestrictedError:
         return await v_url.edit(
-            "**O vídeo não está disponível em sua localização geográfica "
-            "devido a restrições geográficas impostas pelo site.**"
+            "**Video is not available from your geographic location "
+            "due to geographic restrictions imposed by a website.**"
         )
     except MaxDownloadsReached:
-        return await v_url.edit("**O limite máximo de downloads foi atingido.**")
+        return await v_url.edit("**Max-downloads limit has been reached.**")
     except PostProcessingError:
-        return await v_url.edit("**Ocorreu um erro durante o pós-processamento.**")
+        return await v_url.edit("**There was an error during post processing.**")
     except UnavailableVideoError:
-        return await v_url.edit("**A mídia não está disponível no formato solicitado.**")
+        return await v_url.edit("**Media is not available in the requested format.**")
     except XAttrMetadataError as XAME:
         return await v_url.edit(f"**{XAME.code}: {XAME.msg}\n{XAME.reason}**")
     except ExtractorError:
-        return await v_url.edit("**Ocorreu um erro durante a extração de informações.**")
+        return await v_url.edit("**There was an error during info extraction.**")
     except Exception as e:
         return await v_url.edit(f"**{str(type(e)): {str(e)}}**")
     c_time = time.time()
     if audio:
         await v_url.edit(
-            f"**Preparando para enviar arquivo:**\n`{rip_data.get('title')}`"
-            f"\nde `{rip_data.get('uploader')}`"
+            f"**Preparing to upload song:**\n`{rip_data.get('title')}`"
+            f"\nby `{rip_data.get('uploader')}`"
         )
         f_name = glob(os.path.join(TEMP_DOWNLOAD_DIRECTORY, str(s_time), "*.mp3"))[0]
         with open(f_name, "rb") as f:
@@ -759,8 +722,8 @@ async def download_video(v_url):
         await v_url.delete()
     elif video:
         await v_url.edit(
-            f"**Preparando para enviar vídeo:**\n`{rip_data.get('title')}`"
-            f"\nde `{rip_data.get('uploader')}`"
+            f"**Preparing to upload video:**\n`{rip_data.get('title')}`"
+            f"\nby `{rip_data.get('uploader')}`"
         )
         f_path = glob(os.path.join(TEMP_DOWNLOAD_DIRECTORY, str(s_time), "*"))[0]
         # Noob way to convert from .mkv to .mp4
@@ -815,31 +778,34 @@ def deEmojify(inputString):
 
 CMD_HELP.update(
     {
-        "img": ">`.img [número] <consulta> [ou responder]`"
-        "\n**Uso:** Faz uma pesquisa de imagens no Google."
-        "\nPode especificar o número de resultados necessários (o padrão é 3).",
-        "currency": ">`.currency <quantia> <Moeda-origem> <Moeda-alvo>`"
-        "\n**Uso:** Converte várias moedas para você.",
-        "carbon": ">`.carbon <texto> [ou resposta]`"
-        "\n**Uso:** Embeleze seu código usando carbon.now.sh\n"
-        "Use .crblang <texto> para definir o idioma do seu código.",
-        "google": ">`.google [número] <consulta> [ou resposta]`"
-        "\n**Uso:** Faz uma pesquisa no Google."
-        "\nPode especificar o número de resultados necessários (o padrão é 3).",
-        "wiki": ">`.wiki <consulta> [ou resposta]`" "\n**Uso:** Faz uma pesquisa na Wikipedia.",
-        "ud": ">`.ud <consulta> [ou resposta]`" "\n**Uso:** Faz uma pesquisa no Dicionário Urbano.",
-        "tts": ">`.tts <text> [ou resposta]`"
-        "\n**Uso:** Traduz texto em fala para o idioma definido."
-        "\nUse >`.lang tts <código da linguagem>` para definir o idioma do tts. (Padrão é PT-BR.)",
-        "trt": ">`.trt <texto> [ou resposta]`"
-        "\n**Uso:** Traduz o texto para o idioma definido."
-        "\nUse >`.lang trt <código da linguagem>` para definir o idioma para trt. (Padrão é PT-BR)",
-        "yt": ">`.yt [número] <consulta> [ou resposta]`"
-        "\n**Uso:** Faz uma pesquisa no YouTube."
-        "\nPode especificar o número de resultados necessários (o padrão é 3).",
-        "imdb": ">`.imdb <nome-do-filme>`" "\n**Uso:** Mostra informações do filme e outras coisas.",
-        "rip": ">`.ra <url> [ou resposta] ou .rv <qualidade> <url> [ou resposta]` ((Qualidade é opcional))"
-        "\n**Uso:** Baixe vídeos e músicas do YouTube "
-        "(e [muitos outros sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).",
+        "img": ">`.img [count] <query> [or reply]`"
+        "\nUsage: Does an image search on Google."
+        "\nCan specify the number of results needed (default is 3).",
+        "currency": ">`.currency <amount> <from> <to>`"
+        "\nUsage: Converts various currencies for you.",
+        "carbon": ">`.carbon <text> [or reply]`"
+        "\nUsage: Beautify your code using carbon.now.sh\n"
+        "Use .crblang <text> to set language for your code.",
+        "google": ">`.google [count] <query> [or reply]`"
+        "\nUsage: Does a search on Google."
+        "\nCan specify the number of results needed (default is 3).",
+        "wiki": ">`.wiki <query> [or reply]`" "\nUsage: Does a search on Wikipedia.",
+        "ud": ">`.ud <query> [or reply]`" "\nUsage: Does a search on Urban Dictionary.",
+        "tts": ">`.tts <text> [or reply]`"
+        "\nUsage: Translates text to speech for the language which is set."
+        "\nUse >`.lang tts <language code>` to set language for tts. (Default is English.)",
+        "trt": ">`.trt <text> [or reply]`"
+        "\nUsage: Translates text to the language which is set."
+        "\nUse >`.lang trt <language code>` to set language for trt. (Default is English)",
+        "yt": ">`.yt [count] <query> [or reply]`"
+        "\nUsage: Does a YouTube search."
+        "\nCan specify the number of results needed (default is 3).",
+        "imdb": ">`.imdb <movie-name>`" "\nUsage: Shows movie info and other stuff.",
+        "rip": ">`.ra <url>`"
+        "\nUsage: Download videos from YouTube and convert to audio "
+        "\n\n>`.rv <quality> <url>` (quality is optional)"
+        "\nQuality: `144` `240` `360` `480` `720` `1080` `2160`"
+        "\nUsage: Download videos from YouTube"
+        "\n\n[Other supported sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)",
     }
 )
