@@ -19,7 +19,7 @@ async def github(event):
     async with aiohttp.ClientSession() as session:
         async with session.get(URL) as request:
             if request.status == 404:
-                await event.reply("`" + event.pattern_match.group(1) + " не найден`")
+                await event.reply("`" + event.pattern_match.group(1) + " not found`")
                 return
 
             result = await request.json()
@@ -28,15 +28,15 @@ async def github(event):
             name = result.get("name", None)
             company = result.get("company", None)
             bio = result.get("bio", None)
-            created_at = result.get("created_at", "Не найдено")
+            created_at = result.get("created_at", "Not Found")
 
-            REPLY = f"GitHub инфо для `{event.pattern_match.group(1)}`\
-            \nЮзернейм: `{name}`\
-            \nБио: `{bio}`\
+            REPLY = f"GitHub Info for `{event.pattern_match.group(1)}`\
+            \nUsername: `{name}`\
+            \nBio: `{bio}`\
             \nURL: {url}\
-            \nКомпания: `{company}`\
-            \nСоздан: `{created_at}`\
-            \nБольше : [Тут](https://api.github.com/users/{event.pattern_match.group(1)}/events/public)"
+            \nCompany: `{company}`\
+            \nCreated at: `{created_at}`\
+            \nMore info : [Here](https://api.github.com/users/{event.pattern_match.group(1)}/events/public)"
 
             if not result.get("repos_url", None):
                 await event.edit(REPLY)
@@ -49,7 +49,7 @@ async def github(event):
 
                 result = await request.json()
 
-                REPLY += "\nРепозитории:\n"
+                REPLY += "\nRepos:\n"
 
                 for nr in range(len(result)):
                     REPLY += f"[{result[nr].get('name', None)}]({result[nr].get('html_url', None)})\n"
@@ -57,4 +57,4 @@ async def github(event):
                 await event.edit(REPLY)
 
 
-CMD_HELP.update({"github": "`.git`" "\nКак .whois но для гитхаба."})
+CMD_HELP.update({"github": "`.git`" "\nUsage: Like .whois but for GitHub usernames."})

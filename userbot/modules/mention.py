@@ -60,8 +60,8 @@ async def mention(event):
 
 CMD_HELP.update(
     {
-        "mention": "Упоминает юзеров с фейк именем."
-        "\nИспользование: `Привет @hiomaku[лошпедус]`"
-        "\nРезультат: Привет [bluid boi](tg://resolve?domain=hiomaku)"
+        "mention": "Mention users with a custom name."
+        "\nUsage: `Hi @ender1324[bluid boi]`"
+        "\nResult: Hi [bluid boi](tg://resolve?domain=ender1324)"
     }
 )

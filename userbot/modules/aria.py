@@ -22,7 +22,7 @@ def subprocess_run(cmd):
     exitCode = subproc.returncode
     if exitCode != 0:
         print(
-            "Ошибка произошла при обработке:\n"
+            "An error was detected while running the subprocess:\n"
             f"exit code: {exitCode}\n"
             f"stdout: {talk[0]}\n"
             f"stderr: {talk[1]}"
@@ -124,26 +124,26 @@ async def remove_all(event):
         pass
     if not removed:  # If API returns False Try to Remove Through System Call.
         subprocess_run("aria2p remove-all")
-    await event.edit("**Очистка всех загрузок... **")
+    await event.edit("**Clearing on-going downloads... **")
     await sleep(2.5)
-    await event.edit("**Очищены все загрузки.**")
+    await event.edit("**Successfully cleared all downloads.**")
 
 
 @register(outgoing=True, pattern=r"^\.apause(?: |$)(.*)")
 async def pause_all(event):
     # Pause ALL Currently Running Downloads.
-    await event.edit("**Пауза всех загрузок...**")
+    await event.edit("**Pausing downloads...**")
     aria2.pause_all(force=True)
     await sleep(2.5)
-    await event.edit("**Все загрузки приостановлены.**")
+    await event.edit("**Successfully paused on-going downloads.**")
 
 
 @register(outgoing=True, pattern=r"^\.aresume(?: |$)(.*)")
 async def resume_all(event):
-    await event.edit("**Продолжение загрузок...**")
+    await event.edit("**Resuming downloads...**")
     aria2.resume_all()
     await sleep(1)
-    await event.edit("**Загрузки продолжены.**")
+    await event.edit("**Resumed downloads.**")
     await sleep(2.5)
     await event.delete()
 
@@ -155,25 +155,25 @@ async def show_all(event):
     for download in downloads:
         msg = (
             msg
-            + "Файл: `"
+            + "File: `"
             + str(download.name)
-            + "`\nСкорость: "
+            + "`\nSpeed: "
             + str(download.download_speed_string())
-            + "\nПрогресс: "
+            + "\nProgress: "
             + str(download.progress_string())
-            + "\nРазмер: "
+            + "\nTotal Size: "
             + str(download.total_length_string())
-            + "\nСтатус: "
+            + "\nStatus: "
             + str(download.status)
             + "\nETA:  "
             + str(download.eta_string())
             + "\n\n"
         )
     if len(msg) <= 4096:
-        await event.edit("**Загрузки:**\n" + msg)
+        await event.edit("**On-going Downloads:**\n" + msg)
         await sleep(5)
     else:
-        await event.edit("**Вывод большой, отправляю файлом...**")
+        await event.edit("**Output is too big, sending it as a file...**")
         output = "output.txt"
         with open(output, "w") as f:
             f.write(msg)
@@ -190,7 +190,7 @@ async def show_all(event):
 async def check_metadata(gid):
     file = aria2.get_download(gid)
     new_gid = file.followed_by_ids[0]
-    LOGS.info("Изменение GID " + gid + " на" + new_gid)
+    LOGS.info("Changing GID " + gid + " to" + new_gid)
     return new_gid
 
 
@@ -205,15 +205,15 @@ async def check_progress_for_dl(gid, event, previous):
             else:
                 percentage = int(file.progress)
                 downloaded = percentage * int(file.total_length) / 100
-                prog_str = "**Скачиваю:** `[{}{}]` **{}**".format(
+                prog_str = "**Downloading:** `[{}{}]` **{}**".format(
                     "".join("●" for _ in range(math.floor(percentage / 10))),
                     "".join("○" for _ in range(10 - math.floor(percentage / 10))),
                     file.progress_string(),
                 )
 
                 msg = (
-                    f"**Имя:** `{file.name}`\n"
-                    f"**Статус:** {file.status.capitalize()}\n"
+                    f"**Name:** `{file.name}`\n"
+                    f"**Status:** {file.status.capitalize()}\n"
                     f"{prog_str}\n"
                     f"{humanbytes(downloaded)} of {file.total_length_string()}"
                     f" @ {file.download_speed_string()}\n"
@@ -228,32 +228,32 @@ async def check_progress_for_dl(gid, event, previous):
             complete = file.is_complete
             if complete:
                 return await event.edit(
-                    "**Успешно скачано!**\n\n"
-                    f"**Имя:** `{file.name}`\n"
-                    f"**Размер:** {file.total_length_string()}\n"
-                    f"**Путь:** `{TEMP_DOWNLOAD_DIRECTORY + file.name}`\n"
+                    "**Downloaded successfully!**\n\n"
+                    f"**Name:** `{file.name}`\n"
+                    f"**Size:** {file.total_length_string()}\n"
+                    f"**Path:** `{TEMP_DOWNLOAD_DIRECTORY + file.name}`\n"
                 )
         except Exception as e:
-            if " не найден" in str(e) or "'file'" in str(e):
-                await event.edit(f"**Загрузка отменена:**\n`{file.name}`")
+            if " not found" in str(e) or "'file'" in str(e):
+                await event.edit(f"**Download canceled:**\n`{file.name}`")
                 await sleep(2.5)
                 return await event.delete()
-            if " квота превышена" in str(e):
+            if " depth exceeded" in str(e):
                 file.remove(force=True)
                 await event.edit(
-                    f"**Загрузка остановлена:**\n`{file.name}`\n**Ссылка или торрент невалидный.**"
+                    f"**Download cancelled automatically:**\n`{file.name}`\n**Given link/torrent is dead.**"
                 )
 
 
 CMD_HELP.update(
     {
         "aria": ">`.aurl [URL]`\n>`.amag [Magnet Link]`\n>`.ator [path to torrent file]`"
-        "\nСкачивает файл в хранилище юзербота."
+        "\nUsage: Downloads the file into your userbot server storage."
         "\n\n>`.apause (or) .aresume`"
-        "\nПриостанавливает или запускает загрузку."
+        "\nUsage: Pauses/resumes on-going downloads."
         "\n\n>`.aclear`"
-        "\nОчищает квоту и загрузки."
+        "\nUsage: Clears the download queue, deleting all on-going downloads."
         "\n\n>`.ashow`"
-        "\nПоказывает процесс загрузок."
+        "\nUsage: Shows progress of the on-going downloads."
     }
 )

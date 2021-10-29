@@ -68,8 +68,8 @@ async def locks(event):
         what = "everything"
     else:
         if not input_str:
-            return await event.edit("**Я ничего не могу заблокировать!**")
-        return await event.edit(f"**Неверный тип блокировки:** `{input_str}`")
+            return await event.edit("**I can't lock nothing!**")
+        return await event.edit(f"**Invalid lock type:** `{input_str}`")
 
     lock_rights = ChatBannedRights(
         until_date=None,
@@ -88,10 +88,10 @@ async def locks(event):
         await event.client(
             EditChatDefaultBannedRightsRequest(peer=peer_id, banned_rights=lock_rights)
         )
-        await event.edit(f"**Заблокировано {what} для этого чата!**")
+        await event.edit(f"**Locked {what} for this chat!**")
     except BaseException as e:
         return await event.edit(
-            f"**У меня есть нужные права ??**\nОшибка: `{str(e)}`"
+            f"**Do I have proper rights for that ??**\nError: `{str(e)}`"
         )
 
 
@@ -153,8 +153,8 @@ async def rem_locks(event):
         what = "everything"
     else:
         if not input_str:
-            return await event.edit("**Я не могу ничего разблокировать!**")
-        return await event.edit(f"**Неверный тип блокировки:** `{input_str}`")
+            return await event.edit("**I can't unlock nothing!**")
+        return await event.edit(f"**Invalid unlock type:** `{input_str}`")
 
     unlock_rights = ChatBannedRights(
         until_date=None,
@@ -175,19 +175,19 @@ async def rem_locks(event):
                 peer=peer_id, banned_rights=unlock_rights
             )
         )
-        await event.edit(f"**Разблокировано {what} для этого чата!**")
+        await event.edit(f"**Unlocked {what} for this chat!**")
     except BaseException as e:
         return await event.edit(
-            f"**У меня есть нужные права ??**\nОшибка: `{str(e)}`"
+            f"**Do I have proper rights for that ??**\nError: `{str(e)}`"
         )
 
 
 CMD_HELP.update(
     {
         "locks": ">`.lock <all (or) type(s)>` or >`.unlock <all (or) type(s)>`"
-        "\nБлокирует/Разблокирует типы сообщений в чате."
-        "\n[Нужны права админа !!]"
-        "\n\nТипы сообщений: "
+        "\nUsage: Allows you to lock/unlock some common message types in the chat."
+        "\n[NOTE: Requires proper admin rights in the chat !!]"
+        "\n\nAvailable message types to lock/unlock are: "
         "\n`all, msg, media, sticker, gif, game, inline, poll, invite, pin, info`"
     }
 )

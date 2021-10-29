@@ -22,7 +22,7 @@ from userbot.events import register
 async def who(event):
 
     await event.edit(
-        "**Sit tight while I steal some data from the Global Network Zone...**"
+        "**Sit tight while I steal some data from NASA...**"
     )
 
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
@@ -31,7 +31,7 @@ async def who(event):
     replied_user = await get_user(event)
     if replied_user is None:
         return await event.edit(
-            "**Well that's an anonymous admin, good luck figuring out which one!**"
+            "**Can't Fetch Any Data! Maybe User is Anonymous!**"
         )
 
     try:
@@ -106,7 +106,7 @@ async def fetch_info(replied_user, event):
         )
     )
     replied_user_profile_photos_count = (
-        "Person needs help with uploading profile picture."
+        "User doesn't have any Profile Pictures."
     )
     try:
         replied_user_profile_photos_count = replied_user_profile_photos.count
@@ -118,7 +118,7 @@ async def fetch_info(replied_user, event):
     try:
         dc_id, _ = get_input_location(replied_user.profile_photo)
     except Exception as e:
-        dc_id = "Couldn't fetch DC ID!"
+        dc_id = "Couldn't fetch Data Centre ID!"
         str(e)
     common_chat = replied_user.common_chats_count
     username = replied_user.user.username
@@ -144,7 +144,6 @@ async def fetch_info(replied_user, event):
     caption += f"First Name: {first_name}\n"
     caption += f"Last Name: {last_name}\n"
     caption += f"Username: {username}\n"
-    caption += f"Data Centre ID: {dc_id}\n"
     caption += f"Number of Profile Pics: {replied_user_profile_photos_count}\n"
     caption += f"Is Bot: {is_bot}\n"
     caption += f"Is Restricted: {restricted}\n"

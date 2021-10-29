@@ -78,7 +78,7 @@ def register(**args):
 
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
-                    link = "[Support Chat](https://t.me/nozerochat)"
+                    link = "[Support Chat](https://t.me/KensurOT)"
                     text = (
                         "**USERBOT ERROR REPORT**\n"
                         "If you want to, you can report it"

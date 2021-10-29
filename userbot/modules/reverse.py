@@ -38,19 +38,19 @@ async def okgoogle(img):
     message = await img.get_reply_message()
 
     if not message or not message.media:
-        return await img.edit("**Ответьте на фото или стикер.**")
+        return await img.edit("**Reply to a photo or sticker.**")
 
     photo = io.BytesIO()
     await bot.download_media(message, photo)
     if not photo:
-        return await img.edit("**Не могу скачать фото.**")
+        return await img.edit("**Couldn't download the image.**")
 
-    await img.edit("**Обработка...**")
+    await img.edit("**Processing...**")
 
     try:
         image = Image.open(photo)
     except OSError:
-        return await img.edit("**Неподдерживаемое.**")
+        return await img.edit("**Unsupported sexuality, most likely.**")
 
     name = "okgoogle.png"
     image.save(name, "PNG")
@@ -63,11 +63,11 @@ async def okgoogle(img):
     fetchUrl = response.headers["Location"]
 
     if response == 400:
-        return await img.edit("**Google сказал мне молчать.**")
+        return await img.edit("**Google told me to fuck off.**")
 
     await img.edit(
-        "**Фото было успешно выложено в гугл.**"
-        "\n**Обработка исходника сейчас.**"
+        "**Image successfully uploaded to Google. Maybe.**"
+        "\n**Parsing source now. Maybe.**"
     )
     os.remove(name)
     match = await ParseSauce(fetchUrl + "&preferences?hl=en&fg=1#languages")
@@ -75,7 +75,7 @@ async def okgoogle(img):
     imgspage = match["similar_images"]
 
     if not guess and not imgspage:
-        return await img.edit("**Не найдено ничего для тебя.**")
+        return await img.edit("**Couldn't find anything for your uglyass.**")
 
     try:
         counter = int(img.pattern_match.group(1))
@@ -86,16 +86,16 @@ async def okgoogle(img):
 
     if counter == 0:
         return await img.edit(
-            f"**Лучшее совпадение:** `{guess}`\
-                              \n\n[Визуально]({fetchUrl})\
-                              \n\n[Результаты для {guess}]({imgspage})"
+            f"**Best match:** `{guess}`\
+                              \n\n[Visually similar images]({fetchUrl})\
+                              \n\n[Results for {guess}]({imgspage})"
         )
 
     await img.edit(
-        f"**Лучшее совпадение:** `{guess}`\
-                   \n\n[Визуально]({fetchUrl})\
-                   \n\n[Результаты {guess}]({imgspage})\
-                   \n\n**Сравнение изображений...**"
+        f"**Best match:** `{guess}`\
+                   \n\n[Visually similar images]({fetchUrl})\
+                   \n\n[Results for {guess}]({imgspage})\
+                   \n\n**Fetching images...**"
     )
 
     response = googleimagesdownload()
@@ -112,10 +112,10 @@ async def okgoogle(img):
         paths = response.download(arguments)
     except Exception as e:
         return await img.edit(
-            f"**Лучшее совпадение:** `{guess}`\
-                              \n\n[Визуально]({fetchUrl})\
-                              \n\n[Результаты для {guess}]({imgspage})\
-                              \n\n**Ошибка:** `{e}`**.**"
+            f"**Best match:** `{guess}`\
+                              \n\n[Visually similar images]({fetchUrl})\
+                              \n\n[Results for {guess}]({imgspage})\
+                              \n\n**Error:** `{e}`**.**"
         )
 
     lst = paths[0][guess]
@@ -125,9 +125,9 @@ async def okgoogle(img):
         reply_to=img,
     )
     await img.edit(
-        f"**Лучшее совпадение:** `{guess}`\
-                   \n\n[Визуально]({fetchUrl})\
-                   \n\n[Результаты {guess}]({imgspage})"
+        f"**Best match:** `{guess}`\
+                   \n\n[Visually similar images]({fetchUrl})\
+                   \n\n[Results for {guess}]({imgspage})"
     )
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
 
@@ -158,6 +158,9 @@ async def ParseSauce(googleurl):
 CMD_HELP.update(
     {
         "reverse": ">`.reverse [counter] <optional>`"
-        "\nПоиск в гугл картинках."
+        "\nUsage: Reply to a pic/sticker to reverse-search it on Google Images."
+        "\nNumber of results can be specified, default is 3."
+        "\nIf counter is 0, only info and links will be provided."
+        "\nBot might fail to upload images if a high number of results are requested."
     }
 )

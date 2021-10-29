@@ -17,12 +17,12 @@ async def notes_active(svd):
     try:
         from userbot.modules.sql_helper.notes_sql import get_notes
     except AttributeError:
-        return await svd.edit("**В режиме Non-SQL!**")
-    message = "**Нету сохраненных заметок**"
+        return await svd.edit("**Running on Non-SQL mode!**")
+    message = "**There are no saved notes in this chat**"
     notes = get_notes(svd.chat_id)
     for note in notes:
-        if message == "**Нету сохраненных заметок**":
-            message = "Сохраненные заметки:\n"
+        if message == "**There are no saved notes in this chat**":
+            message = "Notes saved in this chat:\n"
         message += f"`#{note.keyword}`\n"
     await svd.edit(message)
 
@@ -33,12 +33,12 @@ async def remove_notes(clr):
     try:
         from userbot.modules.sql_helper.notes_sql import rm_note
     except AttributeError:
-        return await clr.edit("**В режиме Non-SQL!**")
+        return await clr.edit("**Running on Non-SQL mode!**")
     notename = clr.pattern_match.group(1)
     if rm_note(clr.chat_id, notename) is False:
-        return await clr.edit(f"**Не могу найти:** **{notename}**")
+        return await clr.edit(f"**Couldn't find note:** **{notename}**")
     else:
-        return await clr.edit(f"**Успешно удалено:** **{notename}**")
+        return await clr.edit(f"**Successfully deleted note:** **{notename}**")
 
 
 @register(outgoing=True, pattern=r"^\.save (\w*)")
@@ -47,7 +47,7 @@ async def add_note(fltr):
     try:
         from userbot.modules.sql_helper.notes_sql import add_note
     except AttributeError:
-        return await fltr.edit("**В режиме Non-SQL!**")
+        return await fltr.edit("**Running on Non-SQL mode!**")
     keyword = fltr.pattern_match.group(1)
     string = fltr.text.partition(keyword)[2]
     msg = await fltr.get_reply_message()
@@ -65,12 +65,12 @@ async def add_note(fltr):
             msg_id = msg_o.id
         else:
             return await fltr.edit(
-                "**Нужен BOTLOG_CHATID.**"
+                "**Saving media as data for the note requires BOTLOG_CHATID to be set.**"
             )
     elif fltr.reply_to_msg_id and not string:
         rep_msg = await fltr.get_reply_message()
         string = rep_msg.text
-    success = "**Заметка {} сохранена успешна. Используйте** `#{}` **чтобы получить ее.**"
+    success = "**Note {} successfully. Use** `#{}` **to get it.**"
     if add_note(str(fltr.chat_id), keyword, string, msg_id) is False:
         return await fltr.edit(success.format("updated", keyword))
     return await fltr.edit(success.format("added", keyword))
@@ -117,8 +117,8 @@ async def kick_marie_notes(kick):
         Marie(or her clones) notes from a chat. """
     bot_type = kick.pattern_match.group(1).lower()
     if bot_type not in ["marie", "rose"]:
-        return await kick.edit("**Этот бот не поддерживается!**")
-    await kick.edit("**Буду удалять заметки!**")
+        return await kick.edit("**That bot is not yet supported!**")
+    await kick.edit("**Will be kicking away all notes!**")
     await sleep(3)
     resp = await kick.get_reply_message()
     filters = resp.text.split("-")[1:]
@@ -129,7 +129,7 @@ async def kick_marie_notes(kick):
             i = i.replace("**", "")
             await kick.reply("/clear %s" % (i.strip()))
         await sleep(0.3)
-    await kick.respond("**Удалил все заметки бота**")
+    await kick.respond("**Successfully purged bots notes yaay!**\n Gimme cookies!")
     if BOTLOG:
         await kick.client.send_message(
             BOTLOG_CHATID, "I cleaned all notes at " + str(kick.chat_id)
@@ -139,14 +139,16 @@ async def kick_marie_notes(kick):
 CMD_HELP.update(
     {
         "notes": "`#<notename>`"
-        "\nПолучает заметку."
+        "\nUsage: Gets the specified note."
         "\n\n>`.save <notename> <notedata>` or reply to a message with >`.save <notename>`"
-        "\nСохраняет реплай как заметку. "
+        "\nUsage: Saves the replied message as a note with the notename. "
+        "(Works with pics, docs, and stickers too!)"
         "\n\n>`.notes`"
-        "\nПолучает заметки чата."
+        "\nUsage: Gets all saved notes in a chat."
         "\n\n>`.clear <notename>`"
-        "\nУдаляет заметку."
+        "\nUsage: Deletes the specified note."
         "\n\n>`.rmbotnotes <marie/rose>`"
-        "\nУдаляет заметки ботов"
+        "\nUsage: Removes all notes of admin bots"
+        " (Currently supported: Marie, Rose and their clones.) in the chat."
     }
 )

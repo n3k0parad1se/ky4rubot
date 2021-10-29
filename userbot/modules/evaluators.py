@@ -20,12 +20,12 @@ async def evaluate(event):
     """For .eval command, evaluates the given Python expression."""
     expression = event.pattern_match.group(1)
     if not expression:
-        return await event.edit("**Дайте мне выражение для оценки.**")
+        return await event.edit("**Give an expression to evaluate.**")
 
     if expression in ("userbot.session", "config.env"):
-        return await event.edit("**Это опасная операция, не разрешено!**")
+        return await event.edit("**That's a dangerous operation! Not permitted!**")
 
-    await event.edit("**Обработка...**")
+    await event.edit("**Processing...**")
     old_stderr = sys.stderr
     old_stdout = sys.stdout
     redirected_output = sys.stdout = StringIO()
@@ -62,10 +62,10 @@ async def evaluate(event):
             event.chat_id,
             "output.txt",
             reply_to=event.id,
-            caption="**Слишком большой вывод, отправляю файлом...**",
+            caption="**Output too large, sending as file...**",
         )
         return remove("output.txt")
-    await event.edit(f"**Запрос:**\n`{expression}`\n\n**Результат:**\n`{evaluation}`")
+    await event.edit(f"**Query:**\n`{expression}`\n\n**Result:**\n`{evaluation}`")
 
 
 @register(outgoing=True, pattern=r"^\.exec(?: |$|\n)([\s\S]*)")
@@ -73,12 +73,12 @@ async def run(event):
     """For .exec command, which executes the dynamically created program"""
     code = event.pattern_match.group(1)
     if not code:
-        return await event.edit("**Почитайте** `.help exec` **для примера.**")
+        return await event.edit("**Read** `.help exec` **for an example.**")
 
     if code in ("userbot.session", "config.env"):
-        return await event.edit("**Опасная операция, не разрешено!**")
+        return await event.edit("**That's a dangerous operation! Not permitted!**")
 
-    await event.edit("**Обработка...**")
+    await event.edit("**Processing...**")
     if len(code.splitlines()) <= 5:
         codepre = code
     else:
@@ -111,10 +111,10 @@ async def run(event):
             event.chat_id,
             "output.txt",
             reply_to=event.id,
-            caption="**Большой вывод, отправляю файлом...**",
+            caption="**Output too large, sending as file...**",
         )
         return remove("output.txt")
-    await event.edit(f"**Запрос:**\n`{codepre}`\n\n**Результат:**\n`{stdout}`")
+    await event.edit(f"**Query:**\n`{codepre}`\n\n**Result:**\n`{stdout}`")
 
 
 @register(outgoing=True, pattern=r"^\.term(?: |$|\n)([\s\S]*)")
@@ -123,12 +123,12 @@ async def terminal_runner(event):
     command = event.pattern_match.group(1)
 
     if not command:
-        return await event.edit("**Дайте команду или воспользуйтесь .help term для примера.**")
+        return await event.edit("**Give a command or use .help term for an example.**")
 
     if command in ("userbot.session", "config.env"):
-        return await event.edit("**Опасная операция, не разрешено!**")
+        return await event.edit("**That's a dangerous operation! Not permitted!**")
 
-    await event.edit("**Обработка...**")
+    await event.edit("**Processing...**")
     process = await asyncio.create_subprocess_shell(
         command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT
     )
@@ -148,11 +148,11 @@ async def terminal_runner(event):
             event.chat_id,
             "output.txt",
             reply_to=event.id,
-            caption="**Вывод большой, отправляю файлом...**",
+            caption="**Output too large, sending as file...**",
         )
         return remove("output.txt")
 
-    await event.edit(f"**Команда:**\n`{command}`\n\n**Результат:**\n`{result}`")
+    await event.edit(f"**Command:**\n`{command}`\n\n**Result:**\n`{result}`")
 
 
 CMD_HELP.update(
@@ -161,10 +161,10 @@ CMD_HELP.update(
         "`.eval return 2 + 3`\n"
         "`.eval print(event)`\n"
         "`.eval await event.reply('Ender')`\n"
-        "\nЗапускает скрипт python.",
+        "\nUsage: Evaluate Python expressions in the running script args.",
         "exec": "`.exec print('hello')`"
-        "\nЗапускает маленькие скрипты.",
+        "\nUsage: Execute small python scripts in subprocess.",
         "term": "`.term <cmd>`\n"
-        "bash-команды на сервере юзербота.",
+        "Usage: Run bash commands and scripts on your server.",
     }
 )

@@ -36,7 +36,7 @@ async def figlet(event):
         font = style_list[style]
     except KeyError:
         return await event.edit(
-            "**Неверный стиль, обратитесь к **`.help figlet`**.**"
+            "**Invalid style selected, refer to **`.help figlet`**.**"
         )
     result = pyfiglet.figlet_format(deEmojify(text), font=font)
     await event.respond(f"‌‌‎`{result}`")
@@ -51,8 +51,8 @@ def deEmojify(inputString):
 CMD_HELP.update(
     {
         "figlet": ">`.figlet`"
-        "\nСтилизирует текст."
-        "\n\nПример: `.figlet <style> <your text goes here>`"
-        "\nСтили: `slant`, `3d`, `5line`, `alpha`, `banner`, `doh`, `iso`, `letter`, `allig`, `dotm`, `bubble`, `bulb`, `digi`"
+        "\nUsage: Stylizes your text."
+        "\n\nExample: `.figlet <style> <your text goes here>`"
+        "\nAvailable styles: `slant`, `3d`, `5line`, `alpha`, `banner`, `doh`, `iso`, `letter`, `allig`, `dotm`, `bubble`, `bulb`, `digi`"
     }
 )

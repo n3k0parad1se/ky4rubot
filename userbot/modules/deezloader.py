@@ -22,17 +22,17 @@ if not TEMP_DOWNLOAD_DIRECTORY.endswith("/"):
 @register(outgoing=True, pattern=r"^\.deezloader (.*) (flac|320|256|128)")
 async def deeznuts(event):
     if DEEZER_ARL_TOKEN is None:
-        return await event.edit("**Установите** `DEEZER_ARL_TOKEN` **сначала.**")
+        return await event.edit("**Set** `DEEZER_ARL_TOKEN` **first.**")
 
     try:
         loader = Login(DEEZER_ARL_TOKEN)
     except Exception as e:
-        return await event.edit(f"**Ошибка:** `{e}`")
+        return await event.edit(f"**Error:** `{e}`")
 
     try:
         link = get(event.pattern_match.group(1)).url
     except:
-        return await event.edit("**Неверная ссылка.**")
+        return await event.edit("**Error: Invalid link provided.**")
 
     quality = {"flac": "FLAC", "320": "MP3_320", "256": "MP3_256", "128": "MP3_128"}
     quality = quality[event.pattern_match.group(2)]
@@ -41,7 +41,7 @@ async def deeznuts(event):
     if not os.path.exists(temp_dl_path):
         os.makedirs(temp_dl_path)
 
-    await event.edit("**Скачивание...**")
+    await event.edit("**Downloading...**")
 
     if "spotify" in link:
         if "track" in link:
@@ -55,8 +55,8 @@ async def deeznuts(event):
                     not_interface=True,
                 )
             except Exception as e:
-                return await event.edit(f"**Ошибка:** `{e}`")
-            await event.edit("**Загрузка...**")
+                return await event.edit(f"**Error:** `{e}`")
+            await event.edit("**Uploading...**")
             await upload_track(track, event)
             rmtree(temp_dl_path)
             return await event.delete()
@@ -73,8 +73,8 @@ async def deeznuts(event):
                     zips=False,
                 )
             except Exception as e:
-                return await event.edit(f"**Ошибка:** `{e}`")
-            await event.edit("**Загрузка...**")
+                return await event.edit(f"**Error:** `{e}`")
+            await event.edit("**Uploading...**")
             for track in album:
                 await upload_track(track, event)
             rmtree(temp_dl_path)
@@ -92,8 +92,8 @@ async def deeznuts(event):
                     not_interface=True,
                 )
             except Exception as e:
-                return await event.edit(f"**Ошибка:** `{e}`")
-            await event.edit("**Загрузка...**")
+                return await event.edit(f"**Error:** `{e}`")
+            await event.edit("**Uploading...**")
             await upload_track(track, event)
             rmtree(temp_dl_path)
             return await event.delete()
@@ -110,14 +110,14 @@ async def deeznuts(event):
                     zips=False,
                 )
             except Exception as e:
-                return await event.edit(f"**Ошибка:** `{e}`")
-            await event.edit("**Загрузка...**")
+                return await event.edit(f"**Error:** `{e}`")
+            await event.edit("**Uploading...**")
             for track in album:
                 await upload_track(track, event)
             rmtree(temp_dl_path)
             return await event.delete()
 
-    await event.edit("**Неверный синтаксис!\nПрочитайте** `.help deezloader`**.**")
+    await event.edit("**Syntax error!\nRead** `.help deezloader`**.**")
 
 
 async def upload_track(track_location, message):
@@ -147,7 +147,7 @@ async def upload_track(track_location, message):
     else:
         track = str(os.path.basename(track_location).rsplit(".", 1)[0])
 
-    await message.edit(f"**Загрузка...\nТрек:** {track}")
+    await message.edit(f"**Uploading...\nTrack:** {track}")
 
     await message.client.send_file(
         message.chat_id,
@@ -164,7 +164,7 @@ async def upload_track(track_location, message):
 CMD_HELP.update(
     {
         "deezloader": "`.deezloader` <spotify/deezer link> <quality>"
-        "\nСкачивает музыку с Deezer."
-        "\nДоступные расширения: `flac`, `320`, `256`, `128`."
+        "\nUsage: Download music using Deezloader."
+        "\nAvailable qualities: `flac`, `320`, `256`, `128`."
     }
 )

@@ -14,12 +14,12 @@ async def _(event):
     if event.fwd_from:
         return
     if not event.reply_to_msg_id:
-        return await event.edit("**Ответьте на текстовое сообщение.**")
+        return await event.edit("**Reply to a text message.**")
     reply_message = await event.get_reply_message()
     if not reply_message.text:
-        return await event.edit("**Ответьте на текстовое сообщение.**")
+        return await event.edit("**Reply to a text message.**")
     chat = "@QuotLyBot"
-    await event.edit("**Обработка...**")
+    await event.edit("**Processing...**")
 
     try:
         async with bot.conversation(chat) as conv:
@@ -32,23 +32,23 @@ async def _(event):
                 await bot.send_read_acknowledge(conv.chat_id)
 
             except YouBlockedUserError:
-                return await event.reply("**Разблокируйте @QuotLyBot и попробуйте снова**")
+                return await event.reply("**Please unblock @QuotLyBot and try again**")
 
             if response.text.startswith("Hi!"):
                 await event.edit(
-                    "**Отключите приватное Переслано от в настройках**"
+                    "**Can you kindly disable your forward privacy settings for good?**"
                 )
             else:
                 await event.delete()
                 await bot.forward_messages(event.chat_id, response.message)
 
     except TimeoutError:
-        return await event.edit("**Ошибка: **@QuotLyBot** не отвечает.**")
+        return await event.edit("**Error: **@QuotLyBot** is not responding.**")
 
 
 CMD_HELP.update(
     {
         "quote": ">`.q`"
-        "\nДелает текстовые стикеры."
+        "\nUsage: Reply to a text message to convert to sticker using Quotly bot."
     }
 )

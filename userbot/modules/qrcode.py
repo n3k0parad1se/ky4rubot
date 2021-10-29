@@ -57,9 +57,9 @@ async def parseqr(qr_e):
 @register(pattern=r"\.barcode(?: |$)([\s\S]*)", outgoing=True)
 async def bq(event):
     """For .barcode command, genrate a barcode containing the given content."""
-    await event.edit("**Обработка...**")
+    await event.edit("**Processing...**")
     input_str = event.pattern_match.group(1)
-    message = "**Синтаксис:** `.barcode <длинный текст>`"
+    message = "**Syntax:** `.barcode <long text to include>`"
     reply_msg_id = event.message.id
     if input_str:
         message = input_str
@@ -76,7 +76,7 @@ async def bq(event):
         else:
             message = previous_message.message
     else:
-        return event.edit("**Синтаксис:** `.barcode <длинный текст>`")
+        return event.edit("**Syntax:** `.barcode <long text to include>`")
 
     bar_code_type = "code128"
     try:
@@ -93,7 +93,7 @@ async def bq(event):
 async def make_qr(makeqr):
     """For .makeqr command, make a QR Code containing the given content."""
     input_str = makeqr.pattern_match.group(1)
-    message = "**Синтаксис:** `.makeqr <длинный текст>`"
+    message = "**Syntax:** `.makeqr <long text to include>`"
     reply_msg_id = None
     if input_str:
         message = input_str

@@ -24,10 +24,10 @@ from userbot.events import register
 
 @register(pattern=r"^\.shibe$", outgoing=True)
 async def shibe(event):
-    await event.edit("**Обрабатываю...**")
+    await event.edit("**Processing...**")
     response = requests.get("https://shibe.online/api/shibes").json()
     if not response:
-        await event.edit("**Не смог найти шибу.**")
+        await event.edit("**Couldn't fetch a shibe.**")
         return
     await event.client.send_message(entity=event.chat_id, file=response[0])
     await event.delete()
@@ -35,10 +35,10 @@ async def shibe(event):
 
 @register(pattern=r"^\.cat$", outgoing=True)
 async def cats(event):
-    await event.edit("**Обрабатываю...**")
+    await event.edit("**Processing...**")
     response = requests.get("https://shibe.online/api/cats").json()
     if not response:
-        await event.edit("**Не смог найти кота.**")
+        await event.edit("**Couldn't fetch a cat.**")
         return
     await event.client.send_message(entity=event.chat_id, file=response[0])
     await event.delete()
@@ -47,8 +47,8 @@ async def cats(event):
 CMD_HELP.update(
     {
         "animals": ">`.shibe`"
-        "\nОтправляет рандомную пикчу Shiba Inu."
+        "\nUsage: Sends a random image of a Shiba Inu."
         "\n\n`>.cat`"
-        "\nОтправляет рандомную пикчу кота."
+        "\nUsage: Sends a random image of a cat."
     }
 )

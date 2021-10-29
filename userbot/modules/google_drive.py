@@ -72,7 +72,7 @@ REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 __ = G_DRIVE_FOLDER_ID
 if __ is not None:
     if "uc?id=" in G_DRIVE_FOLDER_ID:
-        LOGS.info("G_DRIVE_FOLDER_ID не является верным folderURL...")
+        LOGS.info("G_DRIVE_FOLDER_ID is not a valid folderURL...")
         G_DRIVE_FOLDER_ID = None
     try:
         G_DRIVE_FOLDER_ID = __.split("folders/")[1]
@@ -90,10 +90,10 @@ if __ is not None:
                         _1 = any(map(str.isdigit, __))
                         _2 = bool("-" in __ or "_" in __)
                         if True not in [_1 or _2]:
-                            LOGS.info("G_DRIVE_FOLDER_ID " "не верный ID...")
+                            LOGS.info("G_DRIVE_FOLDER_ID " "not a valid ID...")
                             G_DRIVE_FOLDER_ID = None
                     else:
-                        LOGS.info("G_DRIVE_FOLDER_ID " "не верный URL...")
+                        LOGS.info("G_DRIVE_FOLDER_ID " "not a valid URL...")
                         G_DRIVE_FOLDER_ID = None
 # =========================================================== #
 #                           LOG                               #
@@ -109,7 +109,7 @@ logger.setLevel(logging.ERROR)
 async def generate_credentials(gdrive):
     """- Only generate once for long run -"""
     if helper.get_credentials(str(gdrive.sender_id)) is not None:
-        await gdrive.edit("**Вы уже авторизированы.**")
+        await gdrive.edit("**You've already authorized the bot.**")
         await asyncio.sleep(1.5)
         await gdrive.delete()
         return False
@@ -118,13 +118,13 @@ async def generate_credentials(gdrive):
         try:
             configs = json.loads(G_DRIVE_DATA)
         except json.JSONDecodeError:
-            await gdrive.edit("**Ошибка:** `G_DRIVE_DATA` **неверный!**")
+            await gdrive.edit("**Error:** `G_DRIVE_DATA` **entity is not valid!**")
             return False
     else:
         # Only for old user
         if G_DRIVE_CLIENT_ID is None and G_DRIVE_CLIENT_SECRET is None:
             await gdrive.edit(
-                "`G_DRIVE_DATA` **отсутствует.\nПрочитай:** [Ссылка](https://telegra.ph/How-To-Setup-Google-Drive-04-03)"
+                "`G_DRIVE_DATA` **is missing.\nReadme:** [Link](https://telegra.ph/How-To-Setup-Google-Drive-04-03)"
             )
             return False
         configs = {
@@ -135,12 +135,12 @@ async def generate_credentials(gdrive):
                 "token_uri": GOOGLE_TOKEN_URI,
             }
         }
-    await gdrive.edit("**Создаю данные...**")
+    await gdrive.edit("**Creating credentials...**")
     flow = InstalledAppFlow.from_client_config(
         configs, SCOPES, redirect_uri=REDIRECT_URI
     )
     auth_url, _ = flow.authorization_url(access_type="offline", prompt="consent")
-    msg = await gdrive.respond("**Пройдите в группу BOTLOG для авторизации.**")
+    msg = await gdrive.respond("**Go to your BOTLOG group to authenticate token.**")
     async with gdrive.client.conversation(BOTLOG_CHATID) as conv:
         url_msg = await conv.send_message(
             "**Please go to this URL:**\n"
@@ -157,7 +157,7 @@ async def generate_credentials(gdrive):
         await gdrive.client.delete_messages(BOTLOG_CHATID, [url_msg.id, r.id])
         # Unpack credential objects into strings
         creds = base64.b64encode(pickle.dumps(creds)).decode()
-        await gdrive.edit("**Созданы данные.**")
+        await gdrive.edit("**Created credentials.**")
     helper.save_credentials(str(gdrive.sender_id), creds)
     await gdrive.delete()
     return

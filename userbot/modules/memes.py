@@ -1065,56 +1065,56 @@ async def typewriter(typew):
 CMD_HELP.update(
     {
         "memes": ".cowsay\
-\nКорова говорит.\
+\nUsage: cow which says things.\
 \n\n.cp\
-\nКопирует популярное имя\
+\nUsage: Copypasta the famous meme\
 \n\n.vapor\
-\nVapor-изирует что угодно!\
+\nUsage: Vaporize everything!\
 \n\n.str\
-\nРастягивает.\
+\nUsage: Stretch it.\
 \n\n.zal\
-\nПробуждает чувство хаоса.\
+\nUsage: Invoke the feeling of chaos.\
 \n\n.Oof\
 \nUsage: Ooooof\
 \n\n.oof\
 \nUsage: ooooof\
 \n\n.hi\
-\nПоздравления всем!\
+\nUsage: Greet everyone!\
 \n\n.coinflip <heads/tails>\
-\nПодкидывает монетку !!\
+\nUsage: Flip a coin !!\
 \n\n.owo\
-\nUwU\
+\nUsage: UwU\
 \n\n.react\
-\nДает боту реагировать на все.\
+\nUsage: Make your userbot react to everything.\
 \n\n.slap\
-\nлящя дает !!\
+\nUsage: reply to slap them with random objects !!\
 \n\n.cry\
-\nплачеш.\
+\nUsage: y u du dis, i cri.\
 \n\n.shg\
-\nПожимать плечами !!\
+\nUsage: Shrug at it !!\
 \n\n.run\
-\nБЕГИИИИ!\
+\nUsage: Let Me Run, run, RUNNN!\
 \n\n.chase\
-\nЛучше начать убегать\
+\nUsage: You better start running\
 \n\n.metoo\
-\nХахаахахах да\
+\nUsage: Haha yes\
 \n\n.mock\
-\nИщет и делает настоящее веселье.\
+\nUsage: Do it and find the real fun.\
 \n\n.clap\
-\nПоощрает людей!\
+\nUsage: Praise people!\
 \n\n.f <emoji/character>\
-\nДает респект.\
+\nUsage: Pay Respects.\
 \n\n.bt\
-\nПоверь мне, это полезно.\
+\nUsage: Believe me, you will find this useful.\
 \n\n.type\
-\nДелает из клавиатуры печатную машину!\
+\nUsage: Just a small command to make your keyboard become a typewriter!\
 \n\n.lfy <query>\
-\nГуглит это быстро !!\
-\n\n.decide [Альтернативы: (.yes, .no, .maybe)]\
-\nДелает быстрый выбор.\
+\nUsage: Let me Google that for you real quick !!\
+\n\n.decide [Alternates: (.yes, .no, .maybe)]\
+\nUsage: Make a quick decision.\
 \n\n.scam <action> <time>\
-\n[Действия: (typing, contact, game, location, voice, round, video, photo, document, cancel)]\
-\nДелает фейковые действия чата. (Default action: typing)\
+\n[Available Actions: (typing, contact, game, location, voice, round, video, photo, document, cancel)]\
+\nUsage: Create fake chat actions, for fun. (Default action: typing)\
 \n\n\nThanks to 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for some of these."
     }
 )

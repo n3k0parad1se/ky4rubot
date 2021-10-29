@@ -24,7 +24,7 @@ async def magisk(request):
         "Beta": "https://raw.githubusercontent.com/topjohnwu/magisk-files/master/beta.json",
         "Canary": "https://raw.githubusercontent.com/topjohnwu/magisk-files/master/canary.json",
     }
-    releases = "**Последния релизы магиска:**\n"
+    releases = "**Latest Magisk Releases:**\n"
     for name, release_url in magisk_dict.items():
         data = requests.get(release_url).json()
         releases += (
@@ -44,7 +44,7 @@ async def device_info(request):
     elif textx:
         codename = textx.text
     else:
-        await request.edit("**Использование:** `.device <codename/model>`")
+        await request.edit("**Usage:** `.device <codename/model>`")
         return
     data = json.loads(
         requests.get(
@@ -96,7 +96,7 @@ async def codename_info(request):
         if i["name"].lower() == device.lower() or i["model"].lower() == device.lower()
     ]
     if results:
-        reply = f"**Результаты поиска для** `{brand} {device}`:\n\n"
+        reply = f"**Search results for** `{brand} {device}`:\n\n"
         if len(results) > 8:
             results = results[:8]
         for item in results:
@@ -106,7 +106,7 @@ async def codename_info(request):
                 f"Model: `{item['model']}`\n\n"
             )
     else:
-        reply = f"**Не нашел кодовое имя** `{brand} {device}`\n"
+        reply = f"**Couldn't find the codename of** `{brand} {device}`\n"
     await request.edit(reply)
 
 
@@ -122,7 +122,7 @@ async def devices_specifications(request):
         brand = textx.text.split(" ")[0]
         device = " ".join(textx.text.split(" ")[1:])
     else:
-        await request.edit("**Использование:** `.specs <brand> <device>`")
+        await request.edit("**Usage:** `.specs <brand> <device>`")
         return
     all_brands = (
         BeautifulSoup(
@@ -138,7 +138,7 @@ async def devices_specifications(request):
             i["href"] for i in all_brands if brand == i.text.strip().lower()
         ][0]
     except IndexError:
-        await request.edit(f"`{brand}` **неизвестный бренд!**")
+        await request.edit(f"`{brand}` **is an unknown brand!**")
         return
     devices = BeautifulSoup(requests.get(brand_page_url).content, "lxml").findAll(
         "div", {"class": "model-listing-container-80"}
@@ -151,7 +151,7 @@ async def devices_specifications(request):
             if device in i.text.strip().lower()
         ]
     except IndexError:
-        await request.edit(f"**Не найдено** `{device}`.")
+        await request.edit(f"**Can't find** `{device}`.")
         return
     if len(device_page_url) > 2:
         device_page_url = device_page_url[:2]
@@ -183,11 +183,11 @@ async def twrp(request):
     elif textx:
         device = textx.text.split(" ")[0]
     else:
-        await request.edit("**Использование:** `.twrp <codename>`")
+        await request.edit("**Usage:** `.twrp <codename>`")
         return
     url = requests.get(f"https://dl.twrp.me/{device}/")
     if url.status_code == 404:
-        reply = f"**Не нашел тврп для** `{device}`!`\n"
+        reply = f"**Couldn't find TWRP downloads for** `{device}`!`\n"
         await request.edit(reply)
         return
     page = BeautifulSoup(url.content, "lxml")
@@ -197,9 +197,9 @@ async def twrp(request):
     size = page.find("span", {"class": "filesize"}).text
     date = page.find("em").text.strip()
     reply = (
-        f"**Последние тврп для {device}:**\n"
+        f"**Latest TWRP for {device}:**\n"
         f"[{dl_file}]({dl_link}) - __{size}__\n"
-        f"**Обновлено:** __{date}__\n"
+        f"**Updated:** __{date}__\n"
     )
     await request.edit(reply)
 
@@ -207,14 +207,14 @@ async def twrp(request):
 CMD_HELP.update(
     {
         "android": ">`.magisk`"
-        "\nПолучить последний магиск"
+        "\nGet latest Magisk releases"
         "\n\n>`.device <codename>`"
-        "\nПолучить инфо о девайсе."
+        "\nUsage: Get info about android device codename or model."
         "\n\n>`.codename <brand> <device>`"
-        "\nПоиск кодового имени."
+        "\nUsage: Search for android device codename."
         "\n\n>`.specs <brand> <device>`"
-        "\nПоиск характеристик устройства."
+        "\nUsage: Get device specifications info."
         "\n\n>`.twrp <codename>`"
-        "\nПолучить последний тврп для девайса."
+        "\nUsage: Get latest twrp download for android device."
     }
 )

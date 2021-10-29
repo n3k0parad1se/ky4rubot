@@ -13,7 +13,7 @@ from shutil import which
 
 from telethon import version
 
-from userbot import ALIVE_NAME, CMD_HELP, KENSURBOT_VERSION
+from userbot import ALIVE_NAME, ALIVE_LOGO, CMD_HELP, KENSURBOT_VERSION
 from userbot.events import register
 
 # ================= CONSTANT =================
@@ -38,7 +38,7 @@ async def sysdetails(sysd):
 
             await sysd.edit("`" + result + "`")
         except FileNotFoundError:
-            await sysd.edit("**Установите неофетч сначала!**")
+            await sysd.edit("**Install neofetch first!**")
 
 
 @register(outgoing=True, pattern=r"^\.botver$")
@@ -71,7 +71,7 @@ async def bot_ver(event):
 
         await event.edit(f"**Userbot:** `{verout}`\n" f"**Revision:** `{revout}`\n")
     else:
-        await event.edit("**Позор! У вас нету гита!**")
+        await event.edit("**Shame that you don't have git!**")
 
 
 @register(outgoing=True, pattern=r"^\.pip(?: |$)(.*)")
@@ -81,7 +81,7 @@ async def pipcheck(pip):
         return
     pipmodule = pip.pattern_match.group(1)
     if pipmodule:
-        await pip.edit("**Поиск...**")
+        await pip.edit("**Searching...**")
         pipc = await asyncrunapp(
             "pip3",
             "search",
@@ -95,7 +95,7 @@ async def pipcheck(pip):
 
         if pipout:
             if len(pipout) > 4096:
-                await pip.edit("**Вывод большой, отправляю файлом...**")
+                await pip.edit("**Output too large, sending as file...**")
                 with open("output.txt", "w+") as file:
                     file.write(pipout)
                 await pip.client.send_file(
@@ -106,36 +106,45 @@ async def pipcheck(pip):
                 remove("output.txt")
                 return
             await pip.edit(
-                "**Запрос: **\n`"
+                "**Query: **\n`"
                 f"pip3 search {pipmodule}"
-                "`\n**Результат: **\n`"
+                "`\n**Result: **\n`"
                 f"{pipout}"
                 "`"
             )
         else:
             await pip.edit(
-                "**Запрос: **\n`"
+                "**Query: **\n`"
                 f"pip3 search {pipmodule}"
-                "`\n**Результат: **\n`No result returned/False`"
+                "`\n**Result: **\n`No result returned/False`"
             )
     else:
-        await pip.edit("**Используйте .help pip для примера.**")
+        await pip.edit("**Use .help pip to see an example.**")
 
 
-@register(outgoing=True, pattern=r"^\.alive$")
+@register(outgoing=True, pattern=r"^.(alive|on)$")
 async def amireallyalive(alive):
-    """For .alive command, check if the bot is running."""
-    await alive.edit(
-        f"┏━━━━━━━━━━━━━━━━━━━\n"
-        f"┣•➳➠ **KyaruBot is up!**\n"
-        f"┣•➳➠ Telethon {version.__version__}\n"
-        f"┣•➳➠ Python: {python_version()}\n"
-        f"┣•➳➠ User: {DEFAULTUSER}\n"
-        f"┗━━━━━━━━━━━━━━━━━━━\n"
-        " [🔥YOUTUBE🔥](https://youtube.com/c/Z3roHax) 🔹 [📜TELEGRAM LINKS📜](https://t.me/yezerolinks)\n"
-        " 🔥DISCORD🔥 🔹 📜INSTAGRAM📜\n"
-        " [🔥REPO🔥](https://github.com/n3k0parad1se/Ky4ruBot)\n"
+    """ For .alive command, check if the bot is running.  """
+    output = (
+        "`➖➖➖➖➖➖➖➖➖➖➖`\n"
+        f"•  👾 KyaruBot    :   v{KENSURBOT_VERSION} \n"
+        f"•  ⚙️ Telethon      :   v{version.__version__} \n"
+        f"•  🐍 Python         :   v{python_version()} \n"
+        f"•  👤 User        :   {DEFAULTUSER} \n"
+        "`➖➖➖➖➖➖➖➖➖➖➖`"
     )
+    if ALIVE_LOGO:
+        try:
+            logo = ALIVE_LOGO
+            await bot.send_file(alive.chat_id, logo, caption=output)
+            await alive.delete()
+        except BaseException:
+            await alive.edit(
+                output + "\n\n **Invalid logo**."
+                "\n`Make a direct link for logo or gif`"
+            )
+    else:
+        await alive.edit(output)
 
 
 @register(outgoing=True, pattern=r"^\.aliveu")
@@ -146,7 +155,7 @@ async def amireallyaliveuser(username):
         newuser = message[8:]
         global DEFAULTUSER
         DEFAULTUSER = newuser
-    await username.edit(f"**Юзер изменен на** `{newuser}`**!**")
+    await username.edit(f"**Successfully changed user to** `{newuser}`**!**")
 
 
 @register(outgoing=True, pattern=r"^\.resetalive$")
@@ -154,19 +163,19 @@ async def amireallyalivereset(ureset):
     """For .resetalive command, reset the username in the .alive command."""
     global DEFAULTUSER
     DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
-    await ureset.edit("**Юзер сброшен!**")
+    await ureset.edit("**Successfully reset user for alive!**")
 
 
 CMD_HELP.update(
     {
-        "sysd": ">`.sysd`" "\nПоказывает инфо с помощью неофетча.",
-        "botver": ">`.botver`" "\nПоказывает версию юзербота.",
-        "pip": ">`.pip <module(s)>`" "\nДелает поиск модулей пипа.",
+        "sysd": ">`.sysd`" "\nUsage: Shows system information using neofetch.",
+        "botver": ">`.botver`" "\nUsage: Shows the userbot version.",
+        "pip": ">`.pip <module(s)>`" "\nUsage: Does a search of pip modules(s).",
         "alive": ">`.alive`"
-        "\nПоказывает работу бота."
+        "\nUsage: Type .alive to see wether your bot is working or not."
         "\n\n>`.aliveu <text>`"
-        "\nМеняет имя юзера."
+        "\nUsage: Changes the 'user' in alive to the text you want."
         "\n\n>`.resetalive`"
-        "\nСбрасывает все до умолчаний.",
+        "\nUsage: Resets the user to default.",
     }
 )

@@ -81,8 +81,11 @@ HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
 HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
 
 # Custom (forked) repo URL and BRANCH for updater.
-UPSTREAM_REPO_URL = "https://github.com/n3k0parad1se/Ky4ruBot.git"
+UPSTREAM_REPO_URL = "https://github.com/n3k0parad1se/Ky4ruBot"
 UPSTREAM_REPO_BRANCH = "main"
+
+# Custom alive logo
+ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
 
 # Console verbose logging
 CONSOLE_LOGGER_VERBOSE = strtobool(os.environ.get("CONSOLE_LOGGER_VERBOSE") or "False")
@@ -166,7 +169,7 @@ GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN")
 USR_TOKEN = os.environ.get("USR_TOKEN_UPTOBOX")
 
 # KensurBot version
-KENSURBOT_VERSION = "1.4"
+KENSURBOT_VERSION = "1.2"
 
 
 def shutdown_bot(*_):
@@ -226,7 +229,7 @@ with bot:
 async def update_restart_msg(chat_id, msg_id):
     DEFAULTUSER = ALIVE_NAME or "Set `ALIVE_NAME` ConfigVar!"
     message = (
-        f"**KyaruBot v{KENSURBOT_VERSION} is back up and running!**\n\n"
+        f"**KyaruBot Reborn is back up and running!**\n\n"
         f"**Telethon:** {version.__version__}\n"
         f"**Python:** {python_version()}\n"
         f"**User:** {DEFAULTUSER}"

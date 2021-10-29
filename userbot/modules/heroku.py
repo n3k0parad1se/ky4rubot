@@ -30,10 +30,10 @@ async def variable(var):
     exe = var.pattern_match.group(1)
     if app is None:
         await var.edit(
-            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**"
+            "**Please setup your** `HEROKU_APP_NAME` **and** `HEROKU_API_KEY`**.**"
         )
         return False
-    await var.edit("**Обработка...**")
+    await var.edit("**Processing...**")
     variable = var.pattern_match.group(2)
     if exe == "get":
         if variable != "":
@@ -45,11 +45,11 @@ async def variable(var):
                         "**ConfigVar**:\n"
                         f"`{variable}` = `{heroku_var[variable]}`\n",
                     )
-                    await var.edit("**Проверьте логи.**")
+                    await var.edit("**Check your botlog group.**")
                     return True
                 await var.edit("**Enable** `BOTLOG`**!**")
                 return False
-            await var.edit("**Ошибка: ConfigVar не найден.**")
+            await var.edit("**Error: ConfigVar not found.**")
             return True
         else:
             configvars = heroku_var.to_dict()
@@ -60,7 +60,7 @@ async def variable(var):
                 await var.client.send_message(
                     BOTLOG_CHATID, "#CONFIGVARS\n\n" "**ConfigVars**:\n" f"{msg}"
                 )
-                await var.edit("**Проверьте логи.**")
+                await var.edit("**Check your botlog group.**")
                 return True
             await var.edit("**Enable** `BOTLOG`**!**")
             return False
@@ -74,10 +74,10 @@ async def variable(var):
                     BOTLOG_CHATID,
                     "#DELCONFIGVAR\n\n" "**Delete ConfigVar**:\n" f"`{variable}`",
                 )
-            await var.edit("**Удален ConfigVar.**")
+            await var.edit("**Deleted ConfigVar.**")
             del heroku_var[variable]
         else:
-            await var.edit("**ConfigVar не найден**")
+            await var.edit("**Error: ConfigVar not found.**")
             return True
 
 
@@ -85,7 +85,7 @@ async def variable(var):
 async def set_var(var):
     if app is None:
         return await var.edit(
-            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**"
+            "**Please setup your** `HEROKU_APP_NAME` **and** `HEROKU_API_KEY`**.**"
         )
     await var.edit("**Setting ConfigVar...**")
     variable = var.pattern_match.group(1)
@@ -119,7 +119,7 @@ async def dyno_usage(dyno):
     """
     if app is None:
         return await dyno.edit(
-            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**"
+            "**Please setup your** `HEROKU_APP_NAME` **and** `HEROKU_API_KEY`**.**"
         )
     await dyno.edit("**Processing...**")
     user_id = Heroku.account().id
@@ -177,9 +177,9 @@ async def dyno_usage(dyno):
 async def _(dyno):
     if app is None:
         return await dyno.edit(
-            "**Установите ваш** `HEROKU_APP_NAME` **и** `HEROKU_API_KEY`**.**"
+            "**Please setup your** `HEROKU_APP_NAME` **and** `HEROKU_API_KEY`**.**"
         )
-    await dyno.edit("**Обработка...**")
+    await dyno.edit("**Processing...**")
     with open("logs.txt", "w") as log:
         log.write(app.get_log())
     await dyno.client.send_file(
@@ -192,17 +192,17 @@ async def _(dyno):
 CMD_HELP.update(
     {
         "heroku": ">.`usage`"
-        "\nПоказывает часовую статистику."
+        "\nUsage: Shows Heroku dyno hour stats."
         "\n\n>`.set var <configvar> <value>`"
-        "\nДобавляет ConfigVar-ы."
-        "\nБот будет перезагружен после этого."
+        "\nUsage: Adds new ConfigVar or updates existing ConfigVar."
+        "\nBot will restart after using this command."
         "\n\n>`.get var <configvar>[optional]`"
-        "\nПоказывает все ConfigVar-ы."
-        "\nИспользуйте в приватной группе если нету BOTLOG-а."
+        "\nUsage: Shows current values for specified or all ConfigVars."
+        "\nMake sure to run the command on a private group if you don't have Botlog set up."
         "\n\n>`.del var <configvar>`"
-        "\nУдаляет выбранный ConfigVar."
-        "\nБот будет перезагружен после этого."
+        "\nUsage: Removes specified ConfigVar."
+        "\nBot will restart after using this command."
         "\n\n>`.logs`"
-        "\nПоказывает логи."
+        "\nUsage: Retrieves Heroku dyno logs."
     }
 )

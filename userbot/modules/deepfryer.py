@@ -9,18 +9,18 @@ from userbot.events import register
 
 @register(outgoing=True, pattern=r"^\.df(:? |$)([1-8])?")
 async def _(fry):
-    await fry.edit("**Обработка...**")
+    await fry.edit("**Processing...**")
     level = fry.pattern_match.group(2)
     if fry.fwd_from:
         return
 
     if not fry.reply_to_msg_id:
-        return await fry.edit("**Ответьте на картинку!**")
+        return await fry.edit("**Reply to a message containing an image!**")
 
     reply_message = await fry.get_reply_message()
 
     if not reply_message.media:
-        return await fry.edit("**Ответьте на картинку!**")
+        return await fry.edit("**Reply to a message containing an image!**")
 
     chat = "@image_deepfrybot"
     message_id_to_reply = fry.message.reply_to_msg_id
@@ -38,11 +38,11 @@ async def _(fry):
                 """ - don't spam notif - """
                 await bot.send_read_acknowledge(conv.chat_id)
             except YouBlockedUserError:
-                return await fry.reply("**Разблокируйте бота @image_deepfrybot.**")
+                return await fry.reply("**Please unblock @image_deepfrybot.**")
 
             if response.text.startswith("Forward"):
                 await fry.edit(
-                    "**Разрешите @image_deepfrybot переходить по вашим пересланным сообщениям.**"
+                    "**Error: Whitelist @image_deepfrybot in your forward privacy settings.**"
                 )
             else:
                 downloaded_file_name = await fry.client.download_media(
@@ -66,7 +66,7 @@ async def _(fry):
                         conv.chat_id, [msg.id, response.id, r.id, msg_level.id]
                     )
     except TimeoutError:
-        return await fry.edit("**Ошибка:** @image_deepfrybot **не отвечает.**")
+        return await fry.edit("**Error:** @image_deepfrybot **is not responding.**")
     await fry.delete()
     return os.remove(downloaded_file_name)
 
@@ -74,7 +74,7 @@ async def _(fry):
 CMD_HELP.update(
     {
         "deepfry": ">`.df` or >`.df [level(1-8)]`"
-        "\ndeepfry-рует изображение/стикер с реплая."
+        "\nUsage: deepfry image/sticker from the reply."
         "\n@image_deepfrybot"
     }
 )
