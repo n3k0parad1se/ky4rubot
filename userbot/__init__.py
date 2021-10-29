@@ -77,7 +77,7 @@ LOGSPAMMER = strtobool(os.environ.get("LOGSPAMMER", "False"))
 PM_AUTO_BAN = strtobool(os.environ.get("PM_AUTO_BAN", "False"))
 
 # Custom alive logo
-ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
+ALIVE_LOGO = "https://i.imgur.com/YS0Xr4A.jpg"
 
 # Heroku Credentials for updater.
 HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
