@@ -170,7 +170,7 @@ GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN")
 USR_TOKEN = os.environ.get("USR_TOKEN_UPTOBOX")
 
 # KensurBot version
-KENSURBOT_VERSION = "10.2.0"
+KENSURBOT_VERSION = "2.0"
 
 
 def shutdown_bot(*_):
