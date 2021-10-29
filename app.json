@@ -11,6 +11,9 @@
     "ALIVE_NAME": {
       "description": "Set your name which will be displayed on .alive messages, etc."
     },
+	"ALIVE_LOGO": {
+      "description": "Set your custom logo for alive command."
+	},
     "API_KEY": {
       "description": "Get this value from my.telegram.org."
     },
