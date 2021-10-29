@@ -82,7 +82,7 @@ HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
 HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
 
 # Custom (forked) repo URL and BRANCH for updater.
-UPSTREAM_REPO_URL = "https://github.com/thewhiteharlot/PurpleBot.git"
+UPSTREAM_REPO_URL = "https://github.com/thewhiteharlot/KENSURBOT.git"
 UPSTREAM_REPO_BRANCH = "main"
 
 # Console verbose logging
@@ -169,8 +169,8 @@ GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN")
 # Uptobox
 USR_TOKEN = os.environ.get("USR_TOKEN_UPTOBOX")
 
-# PurpleBot version
-PURPLEBOT_VERSION = "5.1.2"
+# KensurBot version
+KENSURBOT_VERSION = "10.2.0"
 
 
 def shutdown_bot(*_):

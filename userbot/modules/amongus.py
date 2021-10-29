@@ -93,6 +93,6 @@ async def bruh(message, user):
 CMD_HELP.update(
     {
         "amongus": ".saylie\
-    \nEnvie uma imagem de um impostor do Among US com uma fala sua."
+    \nSends a lie with among us | like ftg one."
     }
 )
