@@ -38,6 +38,7 @@ python-barcode
 python-dateutil
 python-dotenv
 pytz
+jikanpy
 qrcode
 requests
 search-engine-parser
