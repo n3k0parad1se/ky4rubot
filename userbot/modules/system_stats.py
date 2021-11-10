@@ -127,12 +127,12 @@ async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
     output = (
         "`➖➖➖➖➖➖➖➖➖➖➖`\n"
-        f"•  😺 KyaruBot v{KENSURBOT_VERSION} \n"
-        f"•  ⚙️ Telethon v{version.__version__} \n"
-        f"•  🐍 Python v{python_version()} \n"
-        f"•  👤 User {DEFAULTUSER} \n"
+        f"•  😺 KyaruBot: v{KENSURBOT_VERSION} \n"
+        f"•  ⚙️ Telethon: v{version.__version__} \n"
+        f"•  🐍 Python: v{python_version()} \n"
+        f"•  👤 User: {DEFAULTUSER} \n"
+        f"•  🐈 Repo: [Stable](https://github.com/n3k0parad1se/ky4rubot) [Canary](https://github.com/n3k0parad1se/ky4rubot-canary)\n"
         "`➖➖➖➖➖➖➖➖➖➖➖`"
-        "\n\n[REPO](https://github.com/n3k0parad1se/Ky4ruBot)"
     )
     if ALIVE_LOGO:
         try:
