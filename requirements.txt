@@ -6,6 +6,7 @@ js2py
 lottie
 asyncurban
 cffi
+patoolib
 CairoSVG
 async_generator
 googletrans==4.0.0rc1
